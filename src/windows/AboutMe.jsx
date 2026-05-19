@@ -1,17 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-function AboutMe() {
-  return (
-    <div className="notepad-content" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-      <div className="notepad-menubar">
-        <span>File</span>
-        <span>Edit</span>
-        <span>Format</span>
-        <span>View</span>
-        <span>Help</span>
-      </div>
-      <div className="notepad-body" style={{ flex: 1, overflow: 'auto' }}>
-{`========================================
+const FALLBACK_ABOUT_ME = `========================================
          Welcome to Lio's Desktop!
 ========================================
 
@@ -44,8 +33,42 @@ Thanks for visiting!
 Have a great day! 🎉
 
 // Last modified: ${new Date().toLocaleDateString()}
-// File: about_me.txt
-`}
+// File: about_me.txt`;
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+function AboutMe() {
+  const [content, setContent] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/profile/about`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.text();
+      })
+      .then((data) => {
+        setContent(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn('Backend not reachable, using fallback about me content.', error);
+        setContent(FALLBACK_ABOUT_ME);
+        setIsLoading(false);
+      });
+  }, []);
+
+  return (
+    <div className="notepad-content" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+      <div className="notepad-menubar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>Format</span>
+        <span>View</span>
+        <span>Help</span>
+      </div>
+      <div className="notepad-body" style={{ flex: 1, overflow: 'auto', cursor: isLoading ? 'wait' : 'text' }}>
+        {isLoading ? 'Loading content from server...' : content}
       </div>
     </div>
   );

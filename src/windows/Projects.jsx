@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const PROJECTS = [
+const FALLBACK_PROJECTS = [
   {
+    id: 1,
     name: 'QuoteYourOS',
     icon: '🖥️',
     desc: 'This very site! A Windows XP-themed personal portfolio.',
@@ -9,6 +10,7 @@ const PROJECTS = [
     url: 'https://app.lyandoo.online'
   },
   {
+    id: 2,
     name: 'Project Bengkel',
     icon: '🔧',
     desc: 'Workshop management system with backoffice features.',
@@ -16,6 +18,7 @@ const PROJECTS = [
     url: '#'
   },
   {
+    id: 3,
     name: 'API Gateway',
     icon: '🚀',
     desc: 'Custom API gateway with auth and rate limiting.',
@@ -23,6 +26,7 @@ const PROJECTS = [
     url: '#'
   },
   {
+    id: 4,
     name: 'Portfolio v1',
     icon: '🎨',
     desc: 'Previous portfolio site (retired).',
@@ -30,6 +34,7 @@ const PROJECTS = [
     url: '#'
   },
   {
+    id: 5,
     name: 'CLI Toolkit',
     icon: '⌨️',
     desc: 'Collection of command-line utilities.',
@@ -38,8 +43,29 @@ const PROJECTS = [
   },
 ];
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/projects`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then((data) => {
+        setProjects(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn('Backend not reachable, using fallback projects.', error);
+        setProjects(FALLBACK_PROJECTS);
+        setIsLoading(false);
+      });
+  }, []);
 
   if (selectedProject) {
     return (
@@ -107,13 +133,17 @@ function Projects() {
             </div>
           </div>
         </div>
-        <div className="explorer-main">
-          {PROJECTS.map((proj, idx) => (
-            <div key={idx} className="explorer-item" onDoubleClick={() => setSelectedProject(proj)}>
-              <div className="explorer-item-icon">{proj.icon}</div>
-              <div className="explorer-item-label">{proj.name}</div>
-            </div>
-          ))}
+        <div className="explorer-main" style={{ cursor: isLoading ? 'wait' : 'default' }}>
+          {isLoading && projects.length === 0 ? (
+            <div style={{ padding: '8px' }}>Connecting to server...</div>
+          ) : (
+            projects.map((proj) => (
+              <div key={proj.id || proj.name} className="explorer-item" onDoubleClick={() => setSelectedProject(proj)}>
+                <div className="explorer-item-icon">{proj.icon}</div>
+                <div className="explorer-item-label">{proj.name}</div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

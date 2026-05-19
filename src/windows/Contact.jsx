@@ -1,16 +1,47 @@
 import React, { useState } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 function Contact() {
   const [formData, setFormData] = useState({ from: '', subject: '', message: '' });
   const [showMsg, setShowMsg] = useState(false);
+  const [msgContent, setMsgContent] = useState('');
+  const [isSending, setIsSending] = useState(false);
 
   const handleSend = () => {
     if (!formData.from || !formData.message) {
-      alert('Please fill in your email and message.');
+      setMsgContent('Please fill in your email and message.');
+      setShowMsg(true);
       return;
     }
-    setShowMsg(true);
-    setFormData({ from: '', subject: '', message: '' });
+
+    setIsSending(true);
+
+    fetch(`${API_URL}/api/contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(() => {
+        setMsgContent('Message sent successfully! ✉️\\n\\nThank you for reaching out, I\'ll get back to you soon.');
+        setShowMsg(true);
+        setFormData({ from: '', subject: '', message: '' });
+      })
+      .catch((error) => {
+        console.warn('Backend not reachable, mocking successful send.', error);
+        setMsgContent('Message sent successfully! ✉️\\n\\n(Fallback mode: backend is currently unreachable, but message was simulated).');
+        setShowMsg(true);
+        setFormData({ from: '', subject: '', message: '' });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   const handleDiscard = () => {
@@ -21,12 +52,14 @@ function Contact() {
     <>
       <div className="outlook-content" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         <div className="outlook-toolbar">
-          <button onClick={handleSend}>📤 Send</button>
+          <button onClick={handleSend} disabled={isSending}>
+            {isSending ? '⏳ Sending...' : '📤 Send'}
+          </button>
           <button>✂️ Cut</button>
           <button>📋 Copy</button>
           <button>📎 Attach</button>
         </div>
-        <div className="outlook-body" style={{ flex: 1, overflowY: 'auto' }}>
+        <div className="outlook-body" style={{ flex: 1, overflowY: 'auto', cursor: isSending ? 'wait' : 'default' }}>
           <h2 style={{ fontSize: '14px', marginBottom: '12px', color: '#003366' }}>📧 New Message</h2>
           
           <div className="outlook-form-row">
@@ -40,6 +73,7 @@ function Contact() {
               placeholder="your@email.com" 
               value={formData.from}
               onChange={(e) => setFormData({ ...formData, from: e.target.value })}
+              disabled={isSending}
             />
           </div>
           <div className="outlook-form-row">
@@ -49,6 +83,7 @@ function Contact() {
               placeholder="Hello from your site!" 
               value={formData.subject}
               onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+              disabled={isSending}
             />
           </div>
           <div className="outlook-form-row" style={{ alignItems: 'flex-start' }}>
@@ -57,12 +92,15 @@ function Contact() {
               placeholder="Write your message here..."
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              disabled={isSending}
             ></textarea>
           </div>
           
           <div className="outlook-actions">
-            <button onClick={handleSend}>📤 Send</button>
-            <button onClick={handleDiscard}>🗑️ Discard</button>
+            <button onClick={handleSend} disabled={isSending}>
+              {isSending ? '⏳ Sending...' : '📤 Send'}
+            </button>
+            <button onClick={handleDiscard} disabled={isSending}>🗑️ Discard</button>
           </div>
 
           <div className="outlook-social">
@@ -104,7 +142,7 @@ function Contact() {
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '16px' }}>
                 <span style={{ fontSize: '32px' }}>ℹ️</span>
                 <p style={{ fontSize: '12px', whiteSpace: 'pre-line' }}>
-                  Message sent successfully! ✉️\n\nThank you for reaching out, I'll get back to you soon.
+                  {msgContent}
                 </p>
               </div>
               <div style={{ textAlign: 'center' }}>
