@@ -1,0 +1,142 @@
+/* === Start Menu === */
+#start-menu {
+  position: fixed;
+  bottom: 36px;
+  left: 0;
+  width: 380px;
+  background: #fff;
+  border: 2px solid #1f3f7a;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.4);
+  z-index: 9500;
+  overflow: hidden;
+  font-family: Tahoma, sans-serif;
+}
+
+/* Header */
+.start-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #1f5fc4 0%, #19479e 100%);
+  color: #fff;
+}
+
+.start-menu-avatar {
+  width: 48px;
+  height: 48px;
+  background: #cadcf5;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.start-menu-username {
+  font-size: 15px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+}
+
+/* Body */
+.start-menu-body {
+  display: flex;
+  min-height: 300px;
+}
+
+.start-menu-left {
+  flex: 1;
+  background: #fff;
+  padding: 6px 0;
+}
+
+.start-menu-divider {
+  width: 1px;
+  background: #d6d2c2;
+}
+
+.start-menu-right {
+  width: 150px;
+  background: #d3e5fa;
+  padding: 6px 0;
+}
+
+/* Menu Items */
+.start-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  color: #000;
+  border: 1px solid transparent;
+}
+
+.start-menu-item:hover {
+  background: #316ac5;
+  color: #fff;
+  border-color: #316ac5;
+}
+
+.start-menu-item-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.start-menu-right .start-menu-item-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+}
+
+.start-menu-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.start-menu-separator {
+  height: 1px;
+  background: #d6d2c2;
+  margin: 4px 12px;
+}
+
+/* Footer */
+.start-menu-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 8px;
+  background: linear-gradient(180deg, #3c81df 0%, #2260b9 100%);
+  border-top: 1px solid #1a4a8a;
+}
+
+.start-menu-footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  font-family: Tahoma, sans-serif;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.start-menu-footer-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.shutdown-icon {
+  font-size: 16px;
+}

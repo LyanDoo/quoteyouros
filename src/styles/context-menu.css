@@ -1,0 +1,32 @@
+/* === Context Menu === */
+.context-menu {
+  position: fixed;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #808080;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  padding: 2px 0;
+  z-index: 9999;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+}
+
+.context-menu-item {
+  padding: 4px 24px 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.context-menu-item:hover {
+  background: #316ac5;
+  color: #fff;
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: #d0d0c0;
+  margin: 2px 4px;
+}

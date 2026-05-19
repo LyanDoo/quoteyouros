@@ -1,0 +1,586 @@
+/* === Window Overrides === */
+#windows-container {
+  position: absolute;
+  inset: 0;
+  bottom: 36px;
+  pointer-events: none;
+}
+
+.xp-window {
+  position: absolute;
+  pointer-events: auto;
+  min-width: 250px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  transition: none;
+}
+
+.xp-window.maximized {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(100vh - 36px) !important;
+}
+
+.xp-window.minimized {
+  display: none !important;
+}
+
+/* Title Bar Overrides */
+.xp-window .title-bar {
+  cursor: move;
+  flex-shrink: 0;
+}
+
+.xp-window.inactive .title-bar {
+  background: linear-gradient(180deg, #9db9eb 0%, #768dbd 10%, #8cb4dd 90%, #9db9eb 100%);
+}
+
+.xp-window .title-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.xp-window .title-bar-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+/* Window Body */
+.xp-window .window-body {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  padding: 0;
+  font-size: 12px;
+}
+
+/* Resize Handles */
+.xp-window .resize-handle {
+  position: absolute;
+  z-index: 1;
+}
+
+.xp-window .resize-handle.right {
+  top: 0;
+  right: -3px;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+}
+
+.xp-window .resize-handle.bottom {
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.xp-window .resize-handle.corner {
+  bottom: -3px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
+  cursor: nwse-resize;
+}
+
+/* ==============================
+   NOTEPAD CONTENT STYLES
+   ============================== */
+.notepad-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.notepad-menubar {
+  display: flex;
+  gap: 0;
+  padding: 2px 4px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.notepad-menubar span {
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.notepad-menubar span:hover {
+  background: #316ac5;
+  color: #fff;
+}
+
+.notepad-body {
+  flex: 1;
+  padding: 4px;
+  overflow: auto;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  background: #fff;
+  color: #000;
+}
+
+/* ==============================
+   EXPLORER CONTENT STYLES
+   ============================== */
+.explorer-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.explorer-toolbar button {
+  font-size: 10px;
+  padding: 2px 8px;
+}
+
+.explorer-address-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.explorer-address-bar label {
+  font-size: 11px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.explorer-address-bar input {
+  flex: 1;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #7f9db9;
+  background: #fff;
+}
+
+.explorer-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.explorer-sidebar {
+  width: 180px;
+  background: linear-gradient(180deg, #6b9de0 0%, #3e72c1 100%);
+  padding: 8px;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid #aca899;
+}
+
+.explorer-sidebar-section {
+  background: #fff;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.explorer-sidebar-title {
+  background: linear-gradient(180deg, #fff 0%, #c7d4ec 100%);
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #21559e;
+  cursor: pointer;
+}
+
+.explorer-sidebar-body {
+  padding: 8px;
+}
+
+.explorer-sidebar-link {
+  display: block;
+  padding: 2px 4px;
+  font-size: 11px;
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.explorer-sidebar-link:hover {
+  text-decoration: underline;
+}
+
+.explorer-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.explorer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.explorer-item:hover {
+  background: #e8e8e0;
+  border-color: #d0d0c0;
+}
+
+.explorer-item-icon {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.explorer-item-label {
+  font-size: 11px;
+  color: #000;
+  word-break: break-word;
+}
+
+/* ==============================
+   IE / BLOG CONTENT STYLES
+   ============================== */
+.ie-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ie-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.ie-toolbar button {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.ie-address-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.ie-address-bar label {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ie-address-bar input {
+  flex: 1;
+  padding: 2px 4px;
+  font-size: 11px;
+  border: 1px solid #7f9db9;
+}
+
+.ie-address-bar button {
+  font-size: 10px;
+  padding: 2px 10px;
+}
+
+.ie-body {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  padding: 16px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #222;
+}
+
+.ie-body h1 {
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: #003399;
+  border-bottom: 2px solid #003399;
+  padding-bottom: 4px;
+}
+
+.ie-body h2 {
+  font-size: 16px;
+  margin: 16px 0 8px;
+  color: #003399;
+}
+
+.blog-post-card {
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f4f4f0;
+  border: 1px solid #d0d0c0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.blog-post-card:hover {
+  background: #e8e8e0;
+  border-color: #316ac5;
+}
+
+.blog-post-card h3 {
+  font-size: 14px;
+  color: #0066cc;
+  margin-bottom: 4px;
+}
+
+.blog-post-card .blog-date {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.blog-post-card p {
+  font-size: 12px;
+  color: #333;
+}
+
+.blog-back-btn {
+  margin-bottom: 12px;
+}
+
+.blog-full-content {
+  line-height: 1.7;
+}
+
+.blog-full-content p {
+  margin-bottom: 10px;
+}
+
+/* ==============================
+   RESUME / WORDPAD STYLES
+   ============================== */
+.wordpad-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wordpad-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.wordpad-toolbar button {
+  font-size: 10px;
+  padding: 2px 8px;
+}
+
+.wordpad-format-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.wordpad-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px;
+  background: #fff;
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000;
+}
+
+.wordpad-body h1 {
+  font-size: 24px;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.wordpad-body h2 {
+  font-size: 16px;
+  margin: 16px 0 6px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2px;
+  color: #003366;
+}
+
+.wordpad-body h3 {
+  font-size: 14px;
+  margin: 10px 0 4px;
+  color: #333;
+}
+
+.wordpad-body p {
+  margin-bottom: 8px;
+}
+
+.wordpad-body ul {
+  margin: 4px 0 8px 20px;
+}
+
+.wordpad-body li {
+  margin-bottom: 2px;
+}
+
+.resume-subtitle {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.resume-job {
+  margin-bottom: 12px;
+}
+
+.resume-job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.resume-job-title {
+  font-weight: bold;
+}
+
+.resume-job-date {
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+}
+
+/* ==============================
+   CONTACT / OUTLOOK STYLES
+   ============================== */
+.outlook-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.outlook-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+  flex-shrink: 0;
+}
+
+.outlook-toolbar button {
+  font-size: 10px;
+  padding: 2px 8px;
+}
+
+.outlook-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: #fff;
+}
+
+.outlook-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.outlook-form-row label {
+  width: 60px;
+  font-size: 11px;
+  text-align: right;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.outlook-form-row input,
+.outlook-form-row textarea {
+  flex: 1;
+  padding: 4px 6px;
+  font-size: 11px;
+  font-family: Tahoma, sans-serif;
+  border: 1px solid #7f9db9;
+}
+
+.outlook-form-row textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.outlook-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.outlook-social {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #d0d0c0;
+}
+
+.outlook-social h3 {
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #003366;
+}
+
+.outlook-social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.outlook-social-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.outlook-social-link:hover {
+  text-decoration: underline;
+}

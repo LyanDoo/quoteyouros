@@ -1,0 +1,22 @@
+/* === Desktop === */
+#desktop {
+  position: fixed;
+  inset: 0;
+  background: url('/wallpaper.jpg') center / cover no-repeat;
+  background-color: #3a6ea5;
+  overflow: hidden;
+}
+
+#desktop-icons {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 40px; /* leave room for taskbar */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  pointer-events: none;
+}
