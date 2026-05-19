@@ -11,9 +11,9 @@ function BootScreen() {
           <span className="flag-yellow"></span>
         </div>
         <div className="boot-text">
-          <span className="boot-microsoft">Microsoft</span>
-          <span className="boot-windows-text">Windows</span>
-          <span className="boot-xp">XP</span>
+          <span className="boot-microsoft">quote</span>
+          <span className="boot-windows-text">Your</span>
+          <span className="boot-xp">OS</span>
         </div>
       </div>
       <div className="boot-progress">
