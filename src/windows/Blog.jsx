@@ -42,6 +42,28 @@ const FALLBACK_BLOG_POSTS = [
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// Helper function to format ISO datetime to human-readable format
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+// Helper function to normalize API response data
+const normalizeBlogPost = (post) => {
+  return {
+    id: post.ID || post.id,
+    title: post.Title || post.title,
+    date: formatDate(post.Date || post.date),
+    excerpt: post.Excerpt || post.excerpt,
+    content: post.Content || post.content,
+  };
+};
+
 function Blog() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -54,7 +76,9 @@ function Blog() {
         return res.json();
       })
       .then((data) => {
-        setPosts(data);
+        // Extract the data array from the response and normalize each post
+        const blogPosts = (data.data || []).map(normalizeBlogPost);
+        setPosts(blogPosts);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -74,7 +98,9 @@ function Blog() {
         return res.json();
       })
       .then((data) => {
-        setSelectedPost(data);
+        // Handle both response object with data property and direct post object
+        const post = data.data ? normalizeBlogPost(data.data) : normalizeBlogPost(data);
+        setSelectedPost(post);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -126,11 +152,16 @@ function Blog() {
         <button>Go</button>
       </div>
       <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
-        <h1>📰 Lio's Blog</h1>
+        <h1>📰 Log Dumped</h1>
         <p style={{ marginBottom: '16px', color: '#555' }}>Thoughts on code, tech, and building things.</p>
         
         {isLoading && posts.length === 0 ? (
           <p>Connecting to server...</p>
+        ) : posts.length === 0 ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+            <p style={{ fontSize: '14px' }}>📝 No blog posts yet.</p>
+            <p style={{ fontSize: '12px', color: '#999' }}>Check back soon for new content!</p>
+          </div>
         ) : (
           <div>
             {posts.map(post => (
