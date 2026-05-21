@@ -45,6 +45,18 @@ const FALLBACK_PROJECTS = [
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// Helper function to normalize API response data
+const normalizeProject = (project) => {
+  return {
+    id: project.ID || project.id,
+    name: project.Name || project.name,
+    icon: project.Icon || project.icon,
+    desc: project.Desc || project.desc,
+    tech: project.Tech || project.tech,
+    url: project.URL || project.url,
+  };
+};
+
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -57,8 +69,8 @@ function Projects() {
         return res.json();
       })
       .then((data) => {
-        // Extract the data array from the response
-        const projectList = data.data || [];
+        // Extract the data array from the response and normalize each project
+        const projectList = (data.data || []).map(normalizeProject);
         // If no projects from API, use fallback
         if (projectList.length === 0) {
           setProjects(FALLBACK_PROJECTS);
