@@ -5,7 +5,10 @@ import Taskbar from './components/Taskbar';
 import StartMenu from './components/StartMenu';
 import ContextMenu from './components/ContextMenu';
 import Window from './components/Window';
+import AdwarePopup from './components/AdwarePopup';
 import { getAppContent } from './windows/registry';
+
+const ADWARE_IMAGES = ['/adware1.png', '/adware2.png', '/adware3.png'];
 
 function App() {
   const [showBoot, setShowBoot] = useState(true);
@@ -14,11 +17,25 @@ function App() {
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [zIndexCounter, setZIndexCounter] = useState(100);
   const [windowIdCounter, setWindowIdCounter] = useState(0);
+  const [adwarePopups, setAdwarePopups] = useState([]);
+  const [adwareZIndex, setAdwareZIndex] = useState(1000);
 
   useEffect(() => {
     // Hide boot screen after 3.5 seconds
     const timer = setTimeout(() => {
       setShowBoot(false);
+      // Generate 1-2 random adware pop-ups after boot screen
+      const numPopups = Math.random() > 0.5 ? 2 : 1;
+      const newPopups = [];
+      for (let i = 0; i < numPopups; i++) {
+        const randomImage = ADWARE_IMAGES[Math.floor(Math.random() * ADWARE_IMAGES.length)];
+        newPopups.push({
+          id: `adware-${Date.now()}-${i}`,
+          zIndex: 1000 + i,
+          imageSrc: randomImage,
+        });
+      }
+      setAdwarePopups(newPopups);
     }, 3500);
     return () => clearTimeout(timer);
   }, []);
@@ -112,6 +129,17 @@ function App() {
     setStartMenuOpen(false);
   };
 
+  const closeAdwarePopup = (id) => {
+    setAdwarePopups((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const focusAdwarePopup = (id) => {
+    setAdwareZIndex((prev) => prev + 1);
+    setAdwarePopups((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, zIndex: adwareZIndex + 1 } : p))
+    );
+  };
+
   return (
     <>
       {showBoot && <BootScreen />}
@@ -135,6 +163,18 @@ function App() {
               />
             ))}
           </div>
+
+          {/* Adware Pop-ups */}
+          {adwarePopups.map((popup) => (
+            <AdwarePopup
+              key={popup.id}
+              id={popup.id}
+              onClose={closeAdwarePopup}
+              onFocus={() => focusAdwarePopup(popup.id)}
+              zIndex={popup.zIndex}
+              imageSrc={popup.imageSrc}
+            />
+          ))}
 
           <StartMenu 
             isOpen={startMenuOpen} 
