@@ -45,10 +45,17 @@ function AboutMe() {
     fetch(`${API_URL}/api/profile/about`)
       .then((res) => {
         if (!res.ok) throw new Error('Network response was not ok');
-        return res.text();
+        return res.json();
       })
       .then((data) => {
-        setContent(data);
+        // Extract the about text from the response
+        const aboutText = data.data?.about || '';
+        // If no about text, use fallback
+        if (!aboutText || aboutText.trim().length === 0) {
+          setContent(FALLBACK_ABOUT_ME);
+        } else {
+          setContent(aboutText);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -68,7 +75,16 @@ function AboutMe() {
         <span>Help</span>
       </div>
       <div className="notepad-body" style={{ flex: 1, overflow: 'auto', cursor: isLoading ? 'wait' : 'text' }}>
-        {isLoading ? 'Loading content from server...' : content}
+        {isLoading ? (
+          'Loading content from server...'
+        ) : content.trim().length === 0 ? (
+          <div style={{ padding: '20px', color: '#666' }}>
+            <p style={{ fontSize: '14px' }}>📝 No about content found.</p>
+            <p style={{ fontSize: '12px', color: '#999' }}>About information will appear here once available.</p>
+          </div>
+        ) : (
+          content
+        )}
       </div>
     </div>
   );

@@ -57,7 +57,14 @@ function Projects() {
         return res.json();
       })
       .then((data) => {
-        setProjects(data);
+        // Extract the data array from the response
+        const projectList = data.data || [];
+        // If no projects from API, use fallback
+        if (projectList.length === 0) {
+          setProjects(FALLBACK_PROJECTS);
+        } else {
+          setProjects(projectList);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -136,6 +143,11 @@ function Projects() {
         <div className="explorer-main" style={{ cursor: isLoading ? 'wait' : 'default' }}>
           {isLoading && projects.length === 0 ? (
             <div style={{ padding: '8px' }}>Connecting to server...</div>
+          ) : projects.length === 0 ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+              <p style={{ fontSize: '14px' }}>📁 No projects found.</p>
+              <p style={{ fontSize: '12px', color: '#999' }}>Projects will appear here when added.</p>
+            </div>
           ) : (
             projects.map((proj) => (
               <div key={proj.id || proj.name} className="explorer-item" onDoubleClick={() => setSelectedProject(proj)}>
