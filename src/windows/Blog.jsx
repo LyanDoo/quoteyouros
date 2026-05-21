@@ -53,6 +53,19 @@ const formatDate = (dateString) => {
   });
 };
 
+// Helper function to format datetime with time
+const formatDateTime = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
 // Helper function to normalize API response data
 const normalizeBlogPost = (post) => {
   return {
@@ -68,6 +81,10 @@ function Blog() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [comments, setComments] = useState([]);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [commentForm, setCommentForm] = useState({ authorName: '', authorEmail: '', content: '', rating: 0 });
+  const [commentPage, setCommentPage] = useState(1);
 
   useEffect(() => {
     fetch(`${API_URL}/api/blog`)
@@ -91,6 +108,9 @@ function Blog() {
   const handlePostClick = (postSummary) => {
     setIsLoading(true);
     setSelectedPost(postSummary); // Set initially to show UI
+    setComments([]);
+    setCommentPage(1);
+    setCommentForm({ authorName: '', authorEmail: '', content: '', rating: 0 });
 
     fetch(`${API_URL}/api/blog/${postSummary.id}`)
       .then((res) => {
@@ -102,12 +122,61 @@ function Blog() {
         const post = data.data ? normalizeBlogPost(data.data) : normalizeBlogPost(data);
         setSelectedPost(post);
         setIsLoading(false);
+        // Fetch comments for this post
+        fetchComments(postSummary.id, 1);
       })
       .catch((error) => {
         console.warn('Backend not reachable, using fallback post detail.', error);
         const fallbackDetail = FALLBACK_BLOG_POSTS.find(p => p.id === postSummary.id);
         setSelectedPost(fallbackDetail || postSummary);
         setIsLoading(false);
+      });
+  };
+
+  const fetchComments = (postId, page = 1) => {
+    setCommentsLoading(true);
+    fetch(`${API_URL}/api/blog/${postId}/comments?page=${page}&limit=10`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch comments');
+        return res.json();
+      })
+      .then((data) => {
+        setComments(data.data?.comments || []);
+        setCommentPage(page);
+        setCommentsLoading(false);
+      })
+      .catch((error) => {
+        console.warn('Failed to load comments.', error);
+        setComments([]);
+        setCommentsLoading(false);
+      });
+  };
+
+  const handlePostComment = (e) => {
+    e.preventDefault();
+    if (!commentForm.content.trim()) return;
+
+    fetch(`${API_URL}/api/blog/${selectedPost.id}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        author_name: commentForm.authorName || 'Anonymous',
+        author_email: commentForm.authorEmail || null,
+        content: commentForm.content,
+        rating: commentForm.rating || null
+      })
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to post comment');
+        return res.json();
+      })
+      .then(() => {
+        setCommentForm({ authorName: '', authorEmail: '', content: '', rating: 0 });
+        fetchComments(selectedPost.id, 1);
+      })
+      .catch((error) => {
+        console.warn('Failed to post comment.', error);
+        alert('Failed to post comment. Please try again.');
       });
   };
 
@@ -133,6 +202,141 @@ function Blog() {
             className="blog-full-content" 
             dangerouslySetInnerHTML={{ __html: selectedPost.content || '<p>Loading content...</p>' }}
           />
+          
+          {/* Comments Section */}
+          <hr style={{ margin: '24px 0', border: 'none', borderTop: '1px solid #ccc' }} />
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{ fontSize: '14px', marginBottom: '16px' }}>💬 Comments ({comments.length})</h2>
+            
+            {/* Post Comment Form */}
+            <div style={{ 
+              background: '#f9f9f9', 
+              border: '1px solid #ddd', 
+              padding: '12px', 
+              borderRadius: '3px',
+              marginBottom: '16px'
+            }}>
+              <h3 style={{ fontSize: '12px', marginBottom: '8px' }}>Leave a Comment</h3>
+              <form onSubmit={handlePostComment}>
+                <input
+                  type="text"
+                  placeholder="Your Name (optional)"
+                  value={commentForm.authorName}
+                  onChange={(e) => setCommentForm({ ...commentForm, authorName: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '6px',
+                    marginBottom: '8px',
+                    border: '1px solid #bbb',
+                    borderRadius: '2px',
+                    fontSize: '11px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email (optional)"
+                  value={commentForm.authorEmail}
+                  onChange={(e) => setCommentForm({ ...commentForm, authorEmail: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '6px',
+                    marginBottom: '8px',
+                    border: '1px solid #bbb',
+                    borderRadius: '2px',
+                    fontSize: '11px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <textarea
+                  placeholder="Your comment..."
+                  value={commentForm.content}
+                  onChange={(e) => setCommentForm({ ...commentForm, content: e.target.value })}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '6px',
+                    marginBottom: '8px',
+                    border: '1px solid #bbb',
+                    borderRadius: '2px',
+                    fontSize: '11px',
+                    minHeight: '60px',
+                    fontFamily: 'inherit',
+                    boxSizing: 'border-box',
+                    resize: 'vertical'
+                  }}
+                />
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '11px' }}>Rating:</label>
+                  <div style={{ display: 'flex', gap: '4px' }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setCommentForm({ ...commentForm, rating: star })}
+                        style={{
+                          background: commentForm.rating >= star ? '#FFD700' : '#ccc',
+                          border: 'none',
+                          padding: '4px 6px',
+                          cursor: 'pointer',
+                          borderRadius: '2px',
+                          fontSize: '12px'
+                        }}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  style={{
+                    padding: '6px 12px',
+                    background: '#0066cc',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '2px',
+                    cursor: 'pointer',
+                    fontSize: '11px'
+                  }}
+                >
+                  Post Comment
+                </button>
+              </form>
+            </div>
+
+            {/* Comments List */}
+            {commentsLoading ? (
+              <p style={{ fontSize: '11px', color: '#666' }}>Loading comments...</p>
+            ) : comments.length === 0 ? (
+              <p style={{ fontSize: '11px', color: '#999' }}>No comments yet. Be the first to comment!</p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {comments.map((comment) => (
+                  <div 
+                    key={comment.id} 
+                    style={{
+                      background: '#f5f5f5',
+                      border: '1px solid #ddd',
+                      padding: '10px',
+                      borderRadius: '3px'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <strong style={{ fontSize: '11px' }}>{comment.author_name}</strong>
+                      <span style={{ fontSize: '10px', color: '#999' }}>{formatDateTime(comment.created_at)}</span>
+                    </div>
+                    {comment.rating && (
+                      <div style={{ fontSize: '12px', marginBottom: '4px' }}>
+                        {'★'.repeat(comment.rating)}<span style={{ color: '#ccc' }}>{'★'.repeat(5 - comment.rating)}</span>
+                      </div>
+                    )}
+                    <p style={{ fontSize: '11px', margin: '4px 0', color: '#333' }}>{comment.content}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
