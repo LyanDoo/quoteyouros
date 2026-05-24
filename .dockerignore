@@ -1,0 +1,30 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor files
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Docs
+README.md
+
+# Docker files (no need to copy into build context)
+Dockerfile
+docker-compose.yml
+.dockerignore

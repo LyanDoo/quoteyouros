@@ -1,0 +1,10 @@
+services:
+  frontend:
+    image: lyandoo/quoteyouros-frontend:v1.0.0
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8030}
+    ports:
+      - "3000:80"
+    restart: unless-stopped
