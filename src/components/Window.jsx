@@ -37,17 +37,13 @@ function TitleBar({ title, icon, isMaximized, isMobile, onMinimize, onMaximize, 
 function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClose }) {
   const isMobile = useIsMobile();
 
-  if (windowData.isMinimized) {
-    return null;
-  }
-
   const { title, icon, width, height, x, y, isMaximized, zIndex, contentComponent: ContentComponent } = windowData;
 
   // --- Mobile: always render as a full-screen-like panel (no drag/resize) ---
   if (isMobile) {
     return (
       <div
-        className={`window xp-window mobile-window ${isFocused ? '' : 'inactive'}`}
+        className={`window xp-window mobile-window ${windowData.isMinimized ? 'minimized' : ''} ${isFocused ? '' : 'inactive'}`}
         style={{ zIndex }}
         onMouseDownCapture={onFocus}
         onTouchStartCapture={onFocus}
@@ -80,7 +76,7 @@ function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClos
       disableDragging={isMaximized}
       enableResizing={!isMaximized}
       style={{ zIndex, display: 'flex', flexDirection: 'column' }}
-      className={`window xp-window ${isMaximized ? 'maximized' : ''} ${isFocused ? '' : 'inactive'}`}
+      className={`window xp-window ${isMaximized ? 'maximized' : ''} ${windowData.isMinimized ? 'minimized' : ''} ${isFocused ? '' : 'inactive'}`}
     >
       <TitleBar
         title={title}
