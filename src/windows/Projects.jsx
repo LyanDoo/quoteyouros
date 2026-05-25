@@ -7,7 +7,7 @@ const FALLBACK_PROJECTS = [
     icon: '🖥️',
     desc: 'This very site! A Windows XP-themed personal portfolio.',
     tech: 'React, Vite, XP.css',
-    url: 'https://app.lyandoo.online'
+    url: 'https://lyandoo.online'
   },
   {
     id: 2,

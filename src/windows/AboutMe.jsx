@@ -24,7 +24,7 @@ to discover more about me!
   • Creative side projects
 
 🌐 Find me at:
-  • Website: app.lyandoo.online
+  • Website: lyandoo.online
   • GitHub: github.com/lio
 
 ─────────────────────────────────────

@@ -16,10 +16,10 @@ function ContextMenu() {
       }
 
       e.preventDefault();
-      
+
       const maxX = window.innerWidth - 160 - 4;
       const maxY = window.innerHeight - 150 - 40;
-      
+
       setPosition({
         x: Math.min(e.clientX, maxX),
         y: Math.min(e.clientY, maxY),
@@ -43,8 +43,8 @@ function ContextMenu() {
   if (!visible) return null;
 
   return (
-    <div 
-      className="context-menu" 
+    <div
+      className="context-menu"
       style={{ display: 'block', left: position.x, top: position.y }}
       onClick={(e) => e.stopPropagation()}
     >
@@ -54,7 +54,7 @@ function ContextMenu() {
       <div className="context-menu-item">New →</div>
       <div className="context-menu-separator"></div>
       <div className="context-menu-item" onClick={() => {
-        alert('QuoteYourOS v1.0\\nA personal site by Lio\\nhttps://app.lyandoo.online');
+        alert('QuoteYourOS v1.0\\nA personal site by Lio\\nhttps://lyandoo.online');
         setVisible(false);
       }}>Properties</div>
     </div>

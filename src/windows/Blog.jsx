@@ -191,7 +191,7 @@ function Blog() {
         </div>
         <div className="ie-address-bar">
           <label>Address</label>
-          <input type="text" value={`https://app.lyandoo.online/blog/${selectedPost.id}`} readOnly />
+          <input type="text" value={`https://lyandoo.online/blog/${selectedPost.id}`} readOnly />
           <button>Go</button>
         </div>
         <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
@@ -299,7 +299,7 @@ function Blog() {
       </div>
       <div className="ie-address-bar">
         <label>Address</label>
-        <input type="text" value="https://app.lyandoo.online/blog" readOnly />
+        <input type="text" value="https://lyandoo.online/blog" readOnly />
         <button>Go</button>
       </div>
       <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
