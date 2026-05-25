@@ -2,6 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+const resolveImageUrl = (imgStr) => {
+  if (!imgStr) return '';
+  if (imgStr.startsWith('http://') || imgStr.startsWith('https://') || imgStr.startsWith('blob:') || imgStr.startsWith('data:')) {
+    return imgStr;
+  }
+  if (imgStr.startsWith('/')) {
+    return `${API_URL}${imgStr}`;
+  }
+  return `${API_URL}/${imgStr}`;
+};
+
 function AdminPanel() {
   const [token, setToken] = useState(localStorage.getItem('admin_token') || '');
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
@@ -224,6 +235,8 @@ function AdminPanel() {
       const formData = new FormData();
       formData.append('title', data.title || data.Title || '');
       formData.append('Title', data.title || data.Title || '');
+      formData.append('author', data.author || data.Author || '');
+      formData.append('Author', data.author || data.Author || '');
       formData.append('description', data.description || data.Description || '');
       formData.append('Description', data.description || data.Description || '');
       if (data.file) {
@@ -446,7 +459,7 @@ function AdminPanel() {
                     ? { title: '', Title: '', date: new Date().toISOString().split('T')[0], Date: new Date().toISOString().split('T')[0], excerpt: '', Excerpt: '', content: '', Content: '' }
                     : activeSection === 'projects'
                     ? { name: '', Name: '', icon: '📂', Icon: '📂', desc: '', Desc: '', tech: '', Tech: '', url: '', URL: '', Url: '' }
-                    : { title: '', Title: '', description: '', Description: '', image: '', Image: '' }
+                    : { title: '', Title: '', author: '', Author: '', description: '', Description: '', image: '', Image: '' }
                 })}
               >
                 ➕ New {activeSection === 'blog' ? 'Post' : activeSection === 'projects' ? 'Project' : 'NFT Photo'}
@@ -621,13 +634,14 @@ function AdminPanel() {
                   <tr>
                     <th>Thumbnail</th>
                     <th>Title</th>
+                    <th>Creator</th>
                     <th>Description</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {galleryList.length === 0 ? (
-                    <tr><td colSpan="4" className="table-empty">No gallery photos found.</td></tr>
+                    <tr><td colSpan="5" className="table-empty">No gallery photos found.</td></tr>
                   ) : (
                     galleryList.map(item => {
                       const id = item.id || item.ID;
@@ -635,12 +649,13 @@ function AdminPanel() {
                         <tr key={id}>
                           <td style={{ textAlign: 'center', verticalAlign: 'middle', width: '80px' }}>
                             <img 
-                              src={item.image || item.Image || item.image_url || item.ImageUrl} 
+                              src={resolveImageUrl(item.image || item.Image || item.image_url || item.ImageUrl)} 
                               alt={item.title || item.Title} 
                               style={{ width: '48px', height: '48px', objectFit: 'cover', border: '1px solid #7f9db9' }} 
                             />
                           </td>
                           <td><strong>{item.title || item.Title}</strong></td>
+                          <td>{item.author || item.Author}</td>
                           <td>{item.description || item.Description}</td>
                           <td>
                             <div className="table-actions">
@@ -827,6 +842,18 @@ function AdminPanel() {
                         required
                       />
                     </div>
+                    <div className="console-form-row">
+                      <label>Creator/Artist:</label>
+                      <input 
+                        type="text" 
+                        value={editorModal.data.author || editorModal.data.Author || ''} 
+                        onChange={(e) => setEditorModal({
+                          ...editorModal,
+                          data: { ...editorModal.data, author: e.target.value, Author: e.target.value }
+                        })}
+                        required
+                      />
+                    </div>
                     <div className="console-form-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
                       <label style={{ marginBottom: '4px' }}>NFT Image File:</label>
                       <input 
@@ -860,7 +887,7 @@ function AdminPanel() {
                           {editorModal.data.file ? 'Selected Image Preview:' : 'Current Image:'}
                         </span>
                         <img 
-                          src={editorModal.data.previewUrl || editorModal.data.image || editorModal.data.Image} 
+                          src={editorModal.data.previewUrl || resolveImageUrl(editorModal.data.image || editorModal.data.Image)} 
                           alt="Preview" 
                           style={{ maxWidth: '120px', maxHeight: '120px', objectFit: 'contain', border: '1px solid #7f9db9' }} 
                         />

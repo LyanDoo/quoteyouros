@@ -4,30 +4,45 @@ const FALLBACK_NFTS = [
   {
     id: 'nft-1',
     title: 'Bored Ape Yacht #4812',
+    author: 'Yuga Labs',
     description: 'A ultra-rare digital collectable Bored Ape featuring laser vision, gold cybernetic fur, and a nautical captain hat.',
     image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'nft-2',
     title: 'CyberPunk Runner #9921',
+    author: 'NeonArtist',
     description: 'Futuristic neon punk character with holographic neural visors and augmented street wear, minted on Ethereum.',
     image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'nft-3',
     title: 'Ether Castle #104',
+    author: 'MetaBuilder',
     description: 'A masterpiece of generative voxel architecture representing a floating crystal fortress in the Ethereum metaverse.',
     image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'nft-4',
     title: 'Abstract Genesis',
+    author: 'AI Inception',
     description: 'An intricate neural-network visual representation exploring machine consciousness and algorithmic creativity.',
     image: 'https://images.unsplash.com/photo-1644016825042-4fcf138f6572?auto=format&fit=crop&w=800&q=80'
   }
 ];
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+const resolveImageUrl = (imgStr) => {
+  if (!imgStr) return '';
+  if (imgStr.startsWith('http://') || imgStr.startsWith('https://') || imgStr.startsWith('blob:') || imgStr.startsWith('data:')) {
+    return imgStr;
+  }
+  if (imgStr.startsWith('/')) {
+    return `${API_URL}${imgStr}`;
+  }
+  return `${API_URL}/${imgStr}`;
+};
 
 function PhotoViewer() {
   const [nfts, setNfts] = useState([]);
@@ -54,8 +69,9 @@ function PhotoViewer() {
         const normalized = (Array.isArray(list) ? list : []).map((item) => ({
           id: item.id || item.ID || item.guid,
           title: item.title || item.Title || 'Untitled NFT',
+          author: item.author || item.Author || 'Unknown',
           description: item.description || item.Description || 'No description provided.',
-          image: item.image || item.Image || item.image_url || item.ImageUrl || ''
+          image: resolveImageUrl(item.image || item.Image || item.image_url || item.ImageUrl || '')
         }));
         
         if (normalized.length === 0) {
@@ -226,6 +242,7 @@ function PhotoViewer() {
       {showInfo && (
         <div className="pv-info-panel" style={{ background: 'rgba(255, 255, 255, 0.95)', borderTop: '1px solid #aca899', padding: '12px 16px', color: '#000', zIndex: 5, boxSizing: 'border-box' }}>
           <h3 style={{ margin: '0 0 4px', fontSize: '13px', color: '#003399', fontWeight: 'bold' }}>{activeNft.title}</h3>
+          <p style={{ margin: '0 0 4px', fontSize: '11px', fontStyle: 'italic', color: '#555' }}>By {activeNft.author}</p>
           <p style={{ margin: 0, fontSize: '11px', lineHeight: '1.4', color: '#333' }}>{activeNft.description}</p>
         </div>
       )}
