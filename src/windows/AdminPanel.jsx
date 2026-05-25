@@ -437,7 +437,7 @@ function AdminPanel() {
                       const id = msg.id || msg.ID;
                       return (
                         <tr key={id} className="clickable-row" onClick={() => setMessageViewModal(msg)}>
-                          <td><strong>{msg.from || msg.From}</strong></td>
+                          <td><strong>{msg.FromEmail || msg.from || msg.From}</strong></td>
                           <td>{msg.subject || msg.Subject}</td>
                           <td>{formatDateTime(msg.created_at || msg.CreatedAt)}</td>
                           <td>
@@ -613,7 +613,7 @@ function AdminPanel() {
             </div>
             <div className="window-body">
               <div className="msg-viewer-row">
-                <strong>From:</strong> <span>{messageViewModal.from || messageViewModal.From}</span>
+                <strong>From:</strong> <span>{messageViewModal.FromEmail || messageViewModal.from || messageViewModal.From}</span>
               </div>
               <div className="msg-viewer-row">
                 <strong>Subject:</strong> <span>{messageViewModal.subject || messageViewModal.Subject}</span>
