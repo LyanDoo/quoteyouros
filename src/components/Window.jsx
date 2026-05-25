@@ -68,31 +68,7 @@ function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClos
     );
   }
 
-  // --- Desktop: maximized ---
-  if (isMaximized) {
-    return (
-      <div
-        className={`window xp-window maximized ${isFocused ? '' : 'inactive'}`}
-        style={{ zIndex }}
-        onMouseDownCapture={onFocus}
-      >
-        <TitleBar
-          title={title}
-          icon={icon}
-          isMaximized={true}
-          isMobile={false}
-          onMinimize={onMinimize}
-          onMaximize={onMaximize}
-          onClose={onClose}
-        />
-        <div className="window-body" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
-          <ContentComponent />
-        </div>
-      </div>
-    );
-  }
-
-  // --- Desktop: normal windowed mode with drag/resize ---
+  // --- Desktop: unified Rnd mode (avoids unmounting ContentComponent during maximize/restore) ---
   return (
     <Rnd
       default={{ x, y, width, height }}
@@ -101,13 +77,15 @@ function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClos
       bounds="parent"
       dragHandleClassName="title-bar"
       onMouseDownCapture={onFocus}
+      disableDragging={isMaximized}
+      enableResizing={!isMaximized}
       style={{ zIndex, display: 'flex', flexDirection: 'column' }}
-      className={`window xp-window ${isFocused ? '' : 'inactive'}`}
+      className={`window xp-window ${isMaximized ? 'maximized' : ''} ${isFocused ? '' : 'inactive'}`}
     >
       <TitleBar
         title={title}
         icon={icon}
-        isMaximized={false}
+        isMaximized={isMaximized}
         isMobile={false}
         onMinimize={onMinimize}
         onMaximize={onMaximize}

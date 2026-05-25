@@ -22,6 +22,7 @@
   left: 0 !important;
   width: 100% !important;
   height: calc(100vh - 36px) !important;
+  transform: translate(0px, 0px) !important;
 }
 
 .xp-window.minimized {
