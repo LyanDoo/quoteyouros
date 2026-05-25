@@ -12,6 +12,7 @@ function AdminPanel() {
   const [blogs, setBlogs] = useState([]);
   const [projects, setProjects] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [aboutContent, setAboutContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
 
@@ -82,6 +83,22 @@ function AdminPanel() {
           setMessages([]);
           setIsLoading(false);
         });
+    } else if (activeSection === 'about') {
+      fetch(`${API_URL}/api/profile/about`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch about me content');
+          return res.json();
+        })
+        .then(data => {
+          const text = data.data?.about || data.about || '';
+          setAboutContent(text);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setAboutContent('');
+          setIsLoading(false);
+        });
     }
   };
 
@@ -128,6 +145,38 @@ function AdminPanel() {
     setBlogs([]);
     setProjects([]);
     setMessages([]);
+  };
+
+  const handleSaveAbout = (e) => {
+    if (e) e.preventDefault();
+    setIsLoading(true);
+    setStatusMsg('');
+
+    fetch(`${API_URL}/api/profile/about`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ about: aboutContent })
+    })
+      .then(res => {
+        if (res.status === 401 || res.status === 403) {
+          handleLogout();
+          throw new Error('Unauthorized session. Please login again.');
+        }
+        if (!res.ok) throw new Error('Save operation failed');
+        return res.json();
+      })
+      .then(() => {
+        alert('About Me content updated successfully.');
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        alert(err.message || 'Operation failed');
+        setIsLoading(false);
+      });
   };
 
   // CRUD Operations
@@ -315,6 +364,12 @@ function AdminPanel() {
                 >
                   📧 Messages Log
                 </div>
+                <div 
+                  className={`console-tree-item ${activeSection === 'about' ? 'selected' : ''}`}
+                  onClick={() => setActiveSection('about')}
+                >
+                  ℹ️ About Me Manager
+                </div>
               </div>
             </div>
           </div>
@@ -323,8 +378,16 @@ function AdminPanel() {
         {/* Right Content Area */}
         <div className="console-main-panel">
           <div className="console-panel-header">
-            <h2>{activeSection === 'blog' ? 'Blog Posts' : activeSection === 'projects' ? 'Projects' : 'User Messages'}</h2>
-            {activeSection !== 'messages' && (
+            <h2>
+              {activeSection === 'blog' 
+                ? 'Blog Posts' 
+                : activeSection === 'projects' 
+                ? 'Projects' 
+                : activeSection === 'messages' 
+                ? 'User Messages' 
+                : 'About Me Editor'}
+            </h2>
+            {activeSection !== 'messages' && activeSection !== 'about' && (
               <button 
                 onClick={() => setEditorModal({
                   type: activeSection,
@@ -449,6 +512,54 @@ function AdminPanel() {
                   )}
                 </tbody>
               </table>
+            )}
+
+            {/* ABOUT ME EDITOR */}
+            {activeSection === 'about' && (
+              <div className="console-about-editor">
+                <div style={{ marginBottom: '12px', fontSize: '11px', color: '#555' }}>
+                  This text is shown in the <strong>About Me</strong> (Notepad) window on the desktop. Plain text formatting (newlines and tabs) is preserved.
+                </div>
+                <textarea
+                  value={aboutContent}
+                  onChange={(e) => setAboutContent(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Tab') {
+                      e.preventDefault();
+                      const { selectionStart, selectionEnd } = e.target;
+                      const value = e.target.value;
+                      const newValue = value.substring(0, selectionStart) + '\t' + value.substring(selectionEnd);
+                      setAboutContent(newValue);
+                      const target = e.target;
+                      setTimeout(() => {
+                        target.selectionStart = target.selectionEnd = selectionStart + 1;
+                      }, 0);
+                    }
+                  }}
+                  className="console-about-textarea"
+                  style={{
+                    width: '100%',
+                    minHeight: '320px',
+                    fontFamily: '"Lucida Console", "Courier New", monospace',
+                    fontSize: '12px',
+                    padding: '8px',
+                    boxSizing: 'border-box',
+                    border: '1px solid #7f9db9',
+                    resize: 'vertical',
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    lineHeight: '1.5'
+                  }}
+                />
+                <div className="console-about-actions" style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                  <button onClick={handleSaveAbout} disabled={isLoading}>
+                    💾 Save Changes
+                  </button>
+                  <button onClick={fetchData} disabled={isLoading}>
+                    🔄 Reload
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>
