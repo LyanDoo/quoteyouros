@@ -197,91 +197,51 @@ function Blog() {
         <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
           <button className="blog-back-btn" onClick={() => setSelectedPost(null)}>← Back to posts</button>
           <h1>{selectedPost.title}</h1>
-          <p style={{ color: '#666', fontSize: '11px', marginBottom: '16px' }}>📅 {selectedPost.date} · By Lio</p>
-          <div 
-            className="blog-full-content" 
+          <p className="blog-meta">📅 {selectedPost.date} · By Lyandoo</p>
+          <div
+            className="blog-full-content"
             dangerouslySetInnerHTML={{ __html: selectedPost.content || '<p>Loading content...</p>' }}
           />
-          
+
           {/* Comments Section */}
-          <hr style={{ margin: '24px 0', border: 'none', borderTop: '1px solid #ccc' }} />
-          <div style={{ marginTop: '24px' }}>
-            <h2 style={{ fontSize: '14px', marginBottom: '16px' }}>💬 Comments ({comments.length})</h2>
-            
+          <hr className="blog-divider" />
+          <div className="blog-comments-section">
+            <h2 className="blog-comments-title">💬 Comments ({comments.length})</h2>
+
             {/* Post Comment Form */}
-            <div style={{ 
-              background: '#f9f9f9', 
-              border: '1px solid #ddd', 
-              padding: '12px', 
-              borderRadius: '3px',
-              marginBottom: '16px'
-            }}>
-              <h3 style={{ fontSize: '12px', marginBottom: '8px' }}>Leave a Comment</h3>
+            <div className="blog-comment-form-container">
+              <h3 className="blog-comment-form-title">Leave a Comment</h3>
               <form onSubmit={handlePostComment}>
                 <input
                   type="text"
                   placeholder="Your Name (optional)"
                   value={commentForm.authorName}
                   onChange={(e) => setCommentForm({ ...commentForm, authorName: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '6px',
-                    marginBottom: '8px',
-                    border: '1px solid #bbb',
-                    borderRadius: '2px',
-                    fontSize: '11px',
-                    boxSizing: 'border-box'
-                  }}
+                  className="blog-comment-input"
                 />
                 <input
                   type="email"
                   placeholder="Your Email (optional)"
                   value={commentForm.authorEmail}
                   onChange={(e) => setCommentForm({ ...commentForm, authorEmail: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '6px',
-                    marginBottom: '8px',
-                    border: '1px solid #bbb',
-                    borderRadius: '2px',
-                    fontSize: '11px',
-                    boxSizing: 'border-box'
-                  }}
+                  className="blog-comment-input"
                 />
                 <textarea
                   placeholder="Your comment..."
                   value={commentForm.content}
                   onChange={(e) => setCommentForm({ ...commentForm, content: e.target.value })}
                   required
-                  style={{
-                    width: '100%',
-                    padding: '6px',
-                    marginBottom: '8px',
-                    border: '1px solid #bbb',
-                    borderRadius: '2px',
-                    fontSize: '11px',
-                    minHeight: '60px',
-                    fontFamily: 'inherit',
-                    boxSizing: 'border-box',
-                    resize: 'vertical'
-                  }}
+                  className="blog-comment-textarea"
                 />
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-                  <label style={{ fontSize: '11px' }}>Rating:</label>
-                  <div style={{ display: 'flex', gap: '4px' }}>
+                <div className="blog-comment-rating-container">
+                  <label>Rating:</label>
+                  <div className="blog-comment-stars">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
                         type="button"
                         onClick={() => setCommentForm({ ...commentForm, rating: star })}
-                        style={{
-                          background: commentForm.rating >= star ? '#FFD700' : '#ccc',
-                          border: 'none',
-                          padding: '4px 6px',
-                          cursor: 'pointer',
-                          borderRadius: '2px',
-                          fontSize: '12px'
-                        }}
+                        className={`blog-comment-star-btn ${commentForm.rating >= star ? 'active' : ''}`}
                       >
                         ★
                       </button>
@@ -290,15 +250,7 @@ function Blog() {
                 </div>
                 <button
                   type="submit"
-                  style={{
-                    padding: '6px 12px',
-                    background: '#0066cc',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '2px',
-                    cursor: 'pointer',
-                    fontSize: '11px'
-                  }}
+                  className="blog-comment-submit-btn"
                 >
                   Post Comment
                 </button>
@@ -307,31 +259,26 @@ function Blog() {
 
             {/* Comments List */}
             {commentsLoading ? (
-              <p style={{ fontSize: '11px', color: '#666' }}>Loading comments...</p>
+              <p className="blog-comments-loading">Loading comments...</p>
             ) : comments.length === 0 ? (
-              <p style={{ fontSize: '11px', color: '#999' }}>No comments yet. Be the first to comment!</p>
+              <p className="blog-comments-empty">No comments yet. Be the first to comment!</p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="blog-comments-list">
                 {comments.map((comment) => (
-                  <div 
-                    key={comment.id} 
-                    style={{
-                      background: '#f5f5f5',
-                      border: '1px solid #ddd',
-                      padding: '10px',
-                      borderRadius: '3px'
-                    }}
+                  <div
+                    key={comment.id}
+                    className="blog-comment-item"
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <strong style={{ fontSize: '11px' }}>{comment.author_name}</strong>
-                      <span style={{ fontSize: '10px', color: '#999' }}>{formatDateTime(comment.created_at)}</span>
+                    <div className="blog-comment-header">
+                      <strong className="blog-comment-author">{comment.author_name}</strong>
+                      <span className="blog-comment-time">{formatDateTime(comment.created_at)}</span>
                     </div>
                     {comment.rating && (
-                      <div style={{ fontSize: '12px', marginBottom: '4px' }}>
-                        {'★'.repeat(comment.rating)}<span style={{ color: '#ccc' }}>{'★'.repeat(5 - comment.rating)}</span>
+                      <div className="blog-comment-rating-stars">
+                        {'★'.repeat(comment.rating)}<span className="star-inactive">{'★'.repeat(5 - comment.rating)}</span>
                       </div>
                     )}
-                    <p style={{ fontSize: '11px', margin: '4px 0', color: '#333' }}>{comment.content}</p>
+                    <p className="blog-comment-content">{comment.content}</p>
                   </div>
                 ))}
               </div>
@@ -358,7 +305,7 @@ function Blog() {
       <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
         <h1>📰 Log Dumped</h1>
         <p style={{ marginBottom: '16px', color: '#555' }}>Thoughts on code, tech, and building things.</p>
-        
+
         {isLoading && posts.length === 0 ? (
           <p>Connecting to server...</p>
         ) : posts.length === 0 ? (
