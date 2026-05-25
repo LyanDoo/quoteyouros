@@ -1427,13 +1427,13 @@
 
   .blog-comment-input {
     padding: 8px;
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 10px;
   }
 
   .blog-comment-textarea {
     padding: 8px;
-    font-size: 13px;
+    font-size: 16px;
     min-height: 80px;
     margin-bottom: 10px;
   }
@@ -1516,7 +1516,7 @@
 
   .outlook-form-row input,
   .outlook-form-row textarea {
-    font-size: 14px;
+    font-size: 16px;
     padding: 8px;
   }
 
@@ -1633,7 +1633,7 @@
 
   .logon-field-row input {
     padding: 6px;
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .logon-actions-row {
@@ -1762,7 +1762,7 @@
   .console-form-row input,
   .console-form-row textarea {
     padding: 6px;
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .console-form-actions {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const FALLBACK_ABOUT_ME = `========================================
-         Welcome to Lio's Desktop!
+         Welcome to Lyan's!
 ========================================
 
 Hi there! 👋
