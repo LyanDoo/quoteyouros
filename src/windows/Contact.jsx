@@ -73,6 +73,24 @@ function Contact() {
           <button>📎 Attach</button>
         </div>
         <div className="outlook-body" style={{ flex: 1, overflowY: 'auto', cursor: isSending ? 'wait' : 'default' }}>
+          <div className="outlook-social">
+            <h3>🔗 Connect with me elsewhere</h3>
+            <div className="outlook-social-links">
+              <a href="https://github.com/LyanDoo" target="_blank" rel="noreferrer" className="outlook-social-link">
+                🐙 GitHub
+              </a>
+              <a href="https://linkedin.com/in/rolyan/" target="_blank" rel="noreferrer" className="outlook-social-link">
+                💼 LinkedIn
+              </a>
+              <a href="https://threads.com/@lyan_doo" target="_blank" rel="noreferrer" className="outlook-social-link">
+                🌀 Threads
+              </a>
+              <a href="mailto:rolyandos@gmail.com" className="outlook-social-link">
+                ✉️ Email
+              </a>
+            </div>
+          </div>
+
           <h2 style={{ fontSize: '14px', marginBottom: '12px', color: '#003366' }}>📧 New Message</h2>
 
           <div className="outlook-form-row">
@@ -114,24 +132,6 @@ function Contact() {
               {isSending ? '⏳ Sending...' : '📤 Send'}
             </button>
             <button onClick={handleDiscard} disabled={isSending}>🗑️ Discard</button>
-          </div>
-
-          <div className="outlook-social">
-            <h3>🔗 Connect with me elsewhere</h3>
-            <div className="outlook-social-links">
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="outlook-social-link">
-                🐙 GitHub
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="outlook-social-link">
-                💼 LinkedIn
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="outlook-social-link">
-                🐦 Twitter
-              </a>
-              <a href="mailto:rolyandos@gmail.com" className="outlook-social-link">
-                ✉️ Email
-              </a>
-            </div>
           </div>
         </div>
       </div>

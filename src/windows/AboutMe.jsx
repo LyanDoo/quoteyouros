@@ -25,7 +25,7 @@ to discover more about me!
 
 🌐 Find me at:
   • Website: lyandoo.online
-  • GitHub: github.com/lio
+  • GitHub: github.com/LyanDoo
 
 ─────────────────────────────────────
 
