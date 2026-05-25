@@ -29,7 +29,7 @@ function StartMenu({ isOpen, closeMenu, openApp }) {
         <div id="start-menu" onClick={(e) => e.stopPropagation()}>
           <div className="start-menu-header">
             <div className="start-menu-avatar">👤</div>
-            <div className="start-menu-username">Lio</div>
+            <div className="start-menu-username">Lyan</div>
           </div>
           <div className="start-menu-body">
             <div className="start-menu-left">

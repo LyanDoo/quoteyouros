@@ -304,7 +304,7 @@ function Blog() {
       </div>
       <div className="ie-body" style={{ cursor: isLoading ? 'wait' : 'default' }}>
         <h1>📰 Log Dumped</h1>
-        <p style={{ marginBottom: '16px', color: '#555' }}>Thoughts on code, tech, and building things.</p>
+        <p style={{ marginBottom: '16px', color: '#555' }}>At the intersection of tech, arts, and society</p>
 
         {isLoading && posts.length === 0 ? (
           <p>Connecting to server...</p>

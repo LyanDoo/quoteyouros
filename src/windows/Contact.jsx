@@ -117,8 +117,8 @@ function Contact() {
               disabled={isSending}
             />
           </div>
-          <div className="outlook-form-row" style={{ alignItems: 'flex-start' }}>
-            <label style={{ marginTop: '4px' }}>Message:</label>
+          <div className="outlook-form-row textarea-row">
+            <label>Message:</label>
             <textarea
               placeholder="Write your message here..."
               value={formData.message}
@@ -146,7 +146,7 @@ function Contact() {
         >
           <div className="window" style={{ width: '300px' }} onClick={(e) => e.stopPropagation()}>
             <div className="title-bar">
-              <div className="title-bar-text">Outlook Express</div>
+              <div className="title-bar-text">Overlook Express</div>
               <div className="title-bar-controls">
                 <button aria-label="Close" onClick={() => setShowMsg(false)}></button>
               </div>

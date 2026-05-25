@@ -25,7 +25,7 @@ export function getAppContent(moduleName) {
     case 'resume':
       return { title: 'Resume.doc - WordPad', width: 580, height: 520, component: Resume };
     case 'contact':
-      return { title: 'Contact - Outlook Express', width: 500, height: 480, component: Contact };
+      return { title: 'Contact - Overlook Express', width: 500, height: 480, component: Contact };
     default:
       return null;
   }

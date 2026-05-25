@@ -777,6 +777,14 @@
   resize: vertical;
 }
 
+.outlook-form-row.textarea-row {
+  align-items: flex-start;
+}
+
+.outlook-form-row.textarea-row label {
+  margin-top: 4px;
+}
+
 .outlook-actions {
   display: flex;
   gap: 8px;
@@ -1085,6 +1093,10 @@
     align-items: stretch;
     gap: 6px;
     margin-bottom: 12px;
+  }
+
+  .outlook-form-row.textarea-row {
+    align-items: stretch;
   }
 
   .outlook-form-row label {
