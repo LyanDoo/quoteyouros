@@ -6,6 +6,7 @@ const ICON_DATA = [
   { id: 'blog', label: 'Blog', icon: '🌐', appModule: 'blog' },
   { id: 'resume', label: 'Resume.doc', icon: '📄', appModule: 'resume' },
   { id: 'contact', label: 'Contact Me', icon: '📧', appModule: 'contact' },
+  { id: 'admin', label: 'Administrative Tools', icon: '⚙️', appModule: 'admin' },
   { id: 'recycle', label: 'Recycle Bin', icon: '🗑️', appModule: null },
 ];
 
