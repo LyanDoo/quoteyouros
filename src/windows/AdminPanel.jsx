@@ -330,8 +330,8 @@ function AdminPanel() {
                   type: activeSection,
                   mode: 'add',
                   data: activeSection === 'blog' 
-                    ? { title: '', date: new Date().toISOString().split('T')[0], excerpt: '', content: '' }
-                    : { name: '', icon: '📂', desc: '', tech: '', url: '' }
+                    ? { title: '', Title: '', date: new Date().toISOString().split('T')[0], Date: new Date().toISOString().split('T')[0], excerpt: '', Excerpt: '', content: '', Content: '' }
+                    : { name: '', Name: '', icon: '📂', Icon: '📂', desc: '', Desc: '', tech: '', Tech: '', url: '', URL: '', Url: '' }
                 })}
               >
                 ➕ New {activeSection === 'blog' ? 'Post' : 'Project'}
@@ -479,7 +479,7 @@ function AdminPanel() {
                         value={editorModal.data.title || editorModal.data.Title || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, title: e.target.value }
+                          data: { ...editorModal.data, title: e.target.value, Title: e.target.value }
                         })}
                         required
                       />
@@ -491,7 +491,7 @@ function AdminPanel() {
                         value={editorModal.data.date || editorModal.data.Date || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, date: e.target.value }
+                          data: { ...editorModal.data, date: e.target.value, Date: e.target.value }
                         })}
                         required
                       />
@@ -503,7 +503,7 @@ function AdminPanel() {
                         value={editorModal.data.excerpt || editorModal.data.Excerpt || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, excerpt: e.target.value }
+                          data: { ...editorModal.data, excerpt: e.target.value, Excerpt: e.target.value }
                         })}
                         required
                       />
@@ -514,8 +514,29 @@ function AdminPanel() {
                         value={editorModal.data.content || editorModal.data.Content || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, content: e.target.value }
+                          data: { ...editorModal.data, content: e.target.value, Content: e.target.value }
                         })}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Tab') {
+                            e.preventDefault();
+                            const { selectionStart, selectionEnd } = e.target;
+                            const value = e.target.value;
+                            const newValue = value.substring(0, selectionStart) + '\t' + value.substring(selectionEnd);
+                            setEditorModal({
+                              ...editorModal,
+                              data: {
+                                ...editorModal.data,
+                                content: newValue,
+                                Content: newValue
+                              }
+                            });
+                            // Keep cursor position
+                            const target = e.target;
+                            setTimeout(() => {
+                              target.selectionStart = target.selectionEnd = selectionStart + 1;
+                            }, 0);
+                          }
+                        }}
                         required
                         style={{ minHeight: '180px', fontFamily: 'Courier New, monospace' }}
                       />
@@ -530,7 +551,7 @@ function AdminPanel() {
                         value={editorModal.data.name || editorModal.data.Name || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, name: e.target.value }
+                          data: { ...editorModal.data, name: e.target.value, Name: e.target.value }
                         })}
                         required
                       />
@@ -542,7 +563,7 @@ function AdminPanel() {
                         value={editorModal.data.icon || editorModal.data.Icon || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, icon: e.target.value }
+                          data: { ...editorModal.data, icon: e.target.value, Icon: e.target.value }
                         })}
                         required
                         maxLength={4}
@@ -555,7 +576,7 @@ function AdminPanel() {
                         value={editorModal.data.desc || editorModal.data.Desc || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, desc: e.target.value }
+                          data: { ...editorModal.data, desc: e.target.value, Desc: e.target.value }
                         })}
                         required
                       />
@@ -567,7 +588,7 @@ function AdminPanel() {
                         value={editorModal.data.tech || editorModal.data.Tech || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, tech: e.target.value }
+                          data: { ...editorModal.data, tech: e.target.value, Tech: e.target.value }
                         })}
                         required
                         placeholder="React, CSS, etc."
@@ -577,10 +598,10 @@ function AdminPanel() {
                       <label>Repository URL:</label>
                       <input 
                         type="text" 
-                        value={editorModal.data.url || editorModal.data.URL || ''} 
+                        value={editorModal.data.url || editorModal.data.URL || editorModal.data.Url || ''} 
                         onChange={(e) => setEditorModal({
                           ...editorModal,
-                          data: { ...editorModal.data, url: e.target.value }
+                          data: { ...editorModal.data, url: e.target.value, URL: e.target.value, Url: e.target.value }
                         })}
                         required
                         placeholder="https://github.com/..."

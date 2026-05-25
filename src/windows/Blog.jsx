@@ -77,6 +77,25 @@ const normalizeBlogPost = (post) => {
   };
 };
 
+const renderBlogContent = (content) => {
+  if (!content) return <p>Loading content...</p>;
+  // Check if content has HTML tags
+  const hasHtml = /<[a-z][\s\S]*>/i.test(content);
+  if (hasHtml) {
+    return (
+      <div
+        className="blog-full-content"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+  return (
+    <div className="blog-full-content" style={{ whiteSpace: 'pre-wrap' }}>
+      {content}
+    </div>
+  );
+};
+
 function Blog() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -198,10 +217,7 @@ function Blog() {
           <button className="blog-back-btn" onClick={() => setSelectedPost(null)}>← Back to posts</button>
           <h1>{selectedPost.title}</h1>
           <p className="blog-meta">📅 {selectedPost.date} · By Lyandoo</p>
-          <div
-            className="blog-full-content"
-            dangerouslySetInnerHTML={{ __html: selectedPost.content || '<p>Loading content...</p>' }}
-          />
+          {renderBlogContent(selectedPost.content)}
 
           {/* Comments Section */}
           <hr className="blog-divider" />
