@@ -454,16 +454,39 @@
 }
 
 .blog-comment-star-btn {
-  background: #ccc;
-  border: none;
-  padding: 4px 6px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px 8px !important;
+  margin: 0;
   cursor: pointer;
-  border-radius: 2px;
-  font-size: 12px;
+  font-size: 20px !important;
+  color: #bbb !important;
+  min-width: 0 !important;
+  height: auto !important;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.blog-comment-star-btn:hover {
+  transform: scale(1.2);
+  color: #ff9900 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.blog-comment-star-btn:active {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .blog-comment-star-btn.active {
-  background: #FFD700;
+  color: #ffb300 !important;
 }
 
 .blog-comment-submit-btn {
@@ -517,10 +540,11 @@
 .blog-comment-rating-stars {
   font-size: 12px;
   margin-bottom: 4px;
+  color: #ffb300;
 }
 
 .blog-comment-rating-stars .star-inactive {
-  color: #ccc;
+  color: #ddd;
 }
 
 .blog-comment-content {
@@ -895,8 +919,8 @@
   }
 
   .blog-comment-star-btn {
-    padding: 6px 10px;
-    font-size: 15px;
+    padding: 8px 12px !important;
+    font-size: 28px !important;
   }
 
   .blog-comment-submit-btn {
