@@ -253,6 +253,66 @@
   border-color: #d0d0c0;
 }
 
+.explorer-item.selected {
+  background: #316ac5 !important;
+  border-color: #316ac5 !important;
+}
+
+.explorer-item.selected .explorer-item-label {
+  color: #fff !important;
+}
+
+/* Explorer detail page styles */
+.explorer-details {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.explorer-details-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.explorer-details-icon {
+  font-size: 48px;
+}
+
+.explorer-details-title-box h2 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.explorer-details-title-box p {
+  font-size: 11px;
+  color: #666;
+  margin: 0;
+}
+
+.explorer-details-card {
+  background: #f4f4f0;
+  border: 1px solid #d0d0c0;
+  padding: 12px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.explorer-details-card p {
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.explorer-details-card p:last-child {
+  margin-bottom: 0;
+}
+
+.explorer-details-btn {
+  padding: 4px 10px;
+}
+
 .explorer-item-icon {
   font-size: 32px;
   margin-bottom: 4px;
@@ -755,6 +815,17 @@
   text-decoration: underline;
 }
 
+/* Resume / Wordpad responsive fallback */
+.resume-iframe-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.resume-mobile-fallback {
+  display: none;
+}
+
 /* ==============================
    MOBILE WINDOW STYLES
    ============================== */
@@ -799,29 +870,66 @@
     min-width: 22px;
   }
 
-  /* Explorer sidebar: collapse to horizontal strip on mobile */
+  /* Explorer sidebar: hide sidebar completely on mobile to give main view maximum room */
   .explorer-body {
     flex-direction: column;
   }
 
   .explorer-sidebar {
-    width: 100%;
-    max-height: 100px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    flex-shrink: 0;
-    border-right: none;
-    border-bottom: 1px solid #aca899;
+    display: none;
   }
 
   .explorer-main {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 6px;
-    padding: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+    padding: 16px;
   }
 
   .explorer-item-icon {
-    font-size: 28px;
+    font-size: 36px;
+  }
+
+  .explorer-item-label {
+    font-size: 13px !important;
+  }
+
+  /* Explorer Project Details View on mobile */
+  .explorer-details {
+    padding: 16px;
+  }
+
+  .explorer-details-header {
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .explorer-details-icon {
+    font-size: 56px;
+  }
+
+  .explorer-details-title-box h2 {
+    font-size: 18px;
+  }
+
+  .explorer-details-title-box p {
+    font-size: 13px;
+  }
+
+  .explorer-details-card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .explorer-details-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .explorer-details-btn {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    width: 100%;
   }
 
   /* Wordpad body: reduce padding on mobile */
@@ -955,26 +1063,113 @@
     line-height: 1.5;
   }
 
-  /* Notepad body */
+  /* Notepad body: scale text to be comfortable to read on mobile */
   .notepad-body {
-    font-size: 11px;
-    padding: 6px;
+    font-size: 14px;
+    padding: 12px;
+    line-height: 1.5;
   }
 
-  /* Outlook form: stack label + input vertically */
+  .notepad-menubar {
+    flex-wrap: wrap;
+  }
+
+  .notepad-menubar span {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  /* Outlook form: stack label + input vertically & increase text sizes */
   .outlook-form-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 6px;
+    margin-bottom: 12px;
   }
 
   .outlook-form-row label {
     width: auto;
     text-align: left;
+    font-size: 13px;
+  }
+
+  .outlook-form-row input,
+  .outlook-form-row textarea {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .outlook-social h3 {
+    font-size: 14px;
   }
 
   .outlook-social-links {
     flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .outlook-social-link {
+    font-size: 13px;
+  }
+
+  .outlook-actions {
+    margin-top: 16px;
+    gap: 10px;
+  }
+
+  .outlook-actions button {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    flex: 1;
+  }
+
+  /* Resume Mobile Fallback: Hide iframe and show fallback card */
+  .resume-iframe-container {
+    display: none !important;
+  }
+
+  .resume-mobile-fallback {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 24px;
+    background: #ece9d8;
+  }
+
+  .resume-mobile-card {
+    background: #fff;
+    border: 1px solid #7f9db9;
+    padding: 24px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .resume-mobile-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .resume-mobile-card h3 {
+    font-size: 16px;
+    margin: 0 0 12px;
+    color: #000;
+  }
+
+  .resume-mobile-card p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+
+  .resume-download-btn {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    width: 100%;
   }
 }
 

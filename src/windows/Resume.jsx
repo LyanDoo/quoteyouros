@@ -91,15 +91,32 @@ function Resume() {
         <button onClick={handleDownload}>⬇️ Download PDF</button>
       </div>
       <div className="wordpad-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-        <iframe
-          src={pdfUrl}
-          style={{
-            flex: 1,
-            border: 'none',
-            borderRadius: '3px'
-          }}
-          title="Resume PDF"
-        />
+        <div className="resume-iframe-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <iframe
+            src={pdfUrl}
+            style={{
+              flex: 1,
+              border: 'none',
+              borderRadius: '3px'
+            }}
+            title="Resume PDF"
+          />
+        </div>
+        <div className="resume-mobile-fallback">
+          <div className="resume-mobile-card">
+            <span className="resume-mobile-icon">📄</span>
+            <h3>Resume_Lio.pdf</h3>
+            <p>
+              PDFs are best viewed by downloading or opening in a new tab on mobile devices.
+            </p>
+            <button 
+              className="resume-download-btn"
+              onClick={handleDownload}
+            >
+              ⬇️ View / Download PDF
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

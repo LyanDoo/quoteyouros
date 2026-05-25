@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const FALLBACK_PROJECTS = [
   {
@@ -61,6 +61,8 @@ function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const lastTapRef = useRef(0);
 
   useEffect(() => {
     fetch(`${API_URL}/api/projects`)
@@ -91,30 +93,30 @@ function Projects() {
       <div className="explorer-content" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         <div className="explorer-toolbar">
           <button onClick={() => setSelectedProject(null)}>← Back</button>
-          <button>Forward</button>
-          <button>Up</button>
+          <button disabled>Forward</button>
+          <button disabled>Up</button>
         </div>
         <div className="explorer-address-bar">
           <label>Address</label>
           <input type="text" value={`C:\\Users\\Lio\\My Projects\\${selectedProject.name}`} readOnly />
         </div>
-        <div style={{ padding: '20px', flex: 1, overflowY: 'auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <span style={{ fontSize: '48px' }}>{selectedProject.icon}</span>
-            <div>
-              <h2 style={{ fontSize: '16px', margin: '0 0 4px' }}>{selectedProject.name}</h2>
-              <p style={{ fontSize: '11px', color: '#666' }}>Type: Project Folder</p>
+        <div className="explorer-details">
+          <div className="explorer-details-header">
+            <span className="explorer-details-icon">{selectedProject.icon}</span>
+            <div className="explorer-details-title-box">
+              <h2>{selectedProject.name}</h2>
+              <p>Type: Project Folder</p>
             </div>
           </div>
-          <div style={{ background: '#f4f4f0', border: '1px solid #d0d0c0', padding: '12px', borderRadius: '3px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '12px', marginBottom: '8px' }}><strong>Description:</strong></p>
-            <p style={{ fontSize: '12px', marginBottom: '8px' }}>{selectedProject.desc}</p>
-            <p style={{ fontSize: '12px' }}><strong>Technologies:</strong> {selectedProject.tech}</p>
+          <div className="explorer-details-card">
+            <p><strong>Description:</strong></p>
+            <p>{selectedProject.desc}</p>
+            <p><strong>Technologies:</strong> {selectedProject.tech}</p>
           </div>
           {selectedProject.url !== '#' ? (
-            <button onClick={() => window.open(selectedProject.url, '_blank')}>🌐 Open in Browser</button>
+            <button className="explorer-details-btn" onClick={() => window.open(selectedProject.url, '_blank')}>🌐 Open in Browser</button>
           ) : (
-            <button disabled>🔒 Private Repository</button>
+            <button className="explorer-details-btn" disabled>🔒 Private Repository</button>
           )}
         </div>
       </div>
@@ -152,7 +154,11 @@ function Projects() {
             </div>
           </div>
         </div>
-        <div className="explorer-main" style={{ cursor: isLoading ? 'wait' : 'default' }}>
+        <div 
+          className="explorer-main" 
+          style={{ cursor: isLoading ? 'wait' : 'default' }}
+          onClick={() => setSelectedItemId(null)}
+        >
           {isLoading && projects.length === 0 ? (
             <div style={{ padding: '8px' }}>Connecting to server...</div>
           ) : projects.length === 0 ? (
@@ -161,12 +167,42 @@ function Projects() {
               <p style={{ fontSize: '12px', color: '#999' }}>Projects will appear here when added.</p>
             </div>
           ) : (
-            projects.map((proj) => (
-              <div key={proj.id || proj.name} className="explorer-item" onDoubleClick={() => setSelectedProject(proj)}>
-                <div className="explorer-item-icon">{proj.icon}</div>
-                <div className="explorer-item-label">{proj.name}</div>
-              </div>
-            ))
+            projects.map((proj) => {
+              const isSelected = selectedItemId === proj.id;
+              
+              const handleTouchEnd = (e) => {
+                e.stopPropagation();
+                setSelectedItemId(proj.id);
+                const now = Date.now();
+                if (now - lastTapRef.current < 300) {
+                  setSelectedProject(proj);
+                  lastTapRef.current = 0;
+                } else {
+                  lastTapRef.current = now;
+                }
+              };
+
+              const handleMouseDown = (e) => {
+                e.stopPropagation();
+                setSelectedItemId(proj.id);
+              };
+
+              return (
+                <div 
+                  key={proj.id || proj.name} 
+                  className={`explorer-item ${isSelected ? 'selected' : ''}`}
+                  onMouseDown={handleMouseDown}
+                  onTouchEnd={handleTouchEnd}
+                  onDoubleClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedProject(proj);
+                  }}
+                >
+                  <div className="explorer-item-icon">{proj.icon}</div>
+                  <div className="explorer-item-label">{proj.name}</div>
+                </div>
+              );
+            })
           )}
         </div>
       </div>
