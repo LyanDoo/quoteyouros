@@ -211,13 +211,37 @@ function AdminPanel() {
 
     setIsLoading(true);
     
+    const isGallery = type === 'gallery';
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    if (!isGallery) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    let body;
+    if (isGallery) {
+      const formData = new FormData();
+      formData.append('title', data.title || data.Title || '');
+      formData.append('Title', data.title || data.Title || '');
+      formData.append('description', data.description || data.Description || '');
+      formData.append('Description', data.description || data.Description || '');
+      if (data.file) {
+        formData.append('image', data.file);
+        formData.append('Image', data.file);
+      } else if (data.image || data.Image) {
+        formData.append('image', data.image || data.Image);
+        formData.append('Image', data.image || data.Image);
+      }
+      body = formData;
+    } else {
+      body = JSON.stringify(data);
+    }
+
     fetch(url, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
+      headers,
+      body
     })
       .then(res => {
         if (res.status === 401 || res.status === 403) {
@@ -803,32 +827,42 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="console-form-row">
-                      <label>Image URL:</label>
+                    <div className="console-form-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                      <label style={{ marginBottom: '4px' }}>NFT Image File:</label>
                       <input 
-                        type="text" 
-                        value={editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl || ''} 
-                        onChange={(e) => setEditorModal({
-                          ...editorModal,
-                          data: { 
-                            ...editorModal.data, 
-                            image: e.target.value, 
-                            Image: e.target.value,
-                            image_url: e.target.value,
-                            ImageUrl: e.target.value
+                        type="file" 
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setEditorModal({
+                              ...editorModal,
+                              data: { 
+                                ...editorModal.data, 
+                                file: file,
+                                previewUrl: previewUrl
+                              }
+                            });
                           }
-                        })}
-                        required
-                        placeholder="https://images.unsplash.com/..."
+                        }}
+                        required={editorModal.mode === 'add'}
                       />
+                      {editorModal.mode === 'edit' && (
+                        <span style={{ fontSize: '10px', color: '#666', marginTop: '2px' }}>
+                          * Leave blank to keep existing image.
+                        </span>
+                      )}
                     </div>
-                    {(editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl) && (
-                      <div className="console-form-row" style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                    {(editorModal.data.previewUrl || editorModal.data.image || editorModal.data.Image) && (
+                      <div className="console-form-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '12px' }}>
+                        <span style={{ fontSize: '10px', color: '#666', marginBottom: '4px' }}>
+                          {editorModal.data.file ? 'Selected Image Preview:' : 'Current Image:'}
+                        </span>
                         <img 
-                          src={editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl} 
+                          src={editorModal.data.previewUrl || editorModal.data.image || editorModal.data.Image} 
                           alt="Preview" 
                           style={{ maxWidth: '120px', maxHeight: '120px', objectFit: 'contain', border: '1px solid #7f9db9' }} 
-                          onError={(e) => { e.target.style.display = 'none'; }}
                         />
                       </div>
                     )}
