@@ -4,6 +4,16 @@ import Blog from './Blog';
 import Resume from './Resume';
 import Contact from './Contact';
 
+// Valid route slugs that map to app modules
+// The key is the URL path segment, the value is the appModule key
+export const VALID_ROUTES = {
+  'about-me': { appModule: 'about-me', icon: '📝' },
+  'projects': { appModule: 'projects', icon: '📁' },
+  'blog': { appModule: 'blog', icon: '🌐' },
+  'resume': { appModule: 'resume', icon: '📄' },
+  'contact': { appModule: 'contact', icon: '📧' },
+};
+
 export function getAppContent(moduleName) {
   switch (moduleName) {
     case 'about-me':
@@ -20,3 +30,4 @@ export function getAppContent(moduleName) {
       return null;
   }
 }
+

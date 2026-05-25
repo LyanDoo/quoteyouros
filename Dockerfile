@@ -18,6 +18,9 @@ RUN npm run build
 # Stage 2 — Serve
 FROM nginx:1.27-alpine
 
+# Copy custom Nginx config for SPA routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built assets into Nginx default serve directory
 COPY --from=build /app/dist /usr/share/nginx/html
 
