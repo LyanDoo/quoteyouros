@@ -4,6 +4,7 @@ import Blog from './Blog';
 import Resume from './Resume';
 import Contact from './Contact';
 import AdminPanel from './AdminPanel';
+import PhotoViewer from './PhotoViewer';
 
 // Valid route slugs that map to app modules
 // The key is the URL path segment, the value is the appModule key
@@ -14,6 +15,7 @@ export const VALID_ROUTES = {
   'resume': { appModule: 'resume', icon: '📄' },
   'contact': { appModule: 'contact', icon: '📧' },
   'admin': { appModule: 'admin', icon: '⚙️' },
+  'gallery': { appModule: 'gallery', icon: '🖼️' },
 };
 
 export function getAppContent(moduleName) {
@@ -30,6 +32,8 @@ export function getAppContent(moduleName) {
       return { title: 'Contact - Overlook Express', width: 500, height: 480, component: Contact };
     case 'admin':
       return { title: 'Administrative Tools', width: 720, height: 480, component: AdminPanel };
+    case 'gallery':
+      return { title: 'Windows Picture and Fax Viewer', width: 620, height: 500, component: PhotoViewer };
     default:
       return null;
   }

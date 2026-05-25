@@ -12,6 +12,7 @@ function AdminPanel() {
   const [blogs, setBlogs] = useState([]);
   const [projects, setProjects] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [galleryList, setGalleryList] = useState([]);
   const [aboutContent, setAboutContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
@@ -99,6 +100,22 @@ function AdminPanel() {
           setAboutContent('');
           setIsLoading(false);
         });
+    } else if (activeSection === 'gallery') {
+      fetch(`${API_URL}/api/gallery`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch gallery items');
+          return res.json();
+        })
+        .then(data => {
+          const list = data.data || data;
+          setGalleryList(Array.isArray(list) ? list : []);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setGalleryList([]);
+          setIsLoading(false);
+        });
     }
   };
 
@@ -145,6 +162,7 @@ function AdminPanel() {
     setBlogs([]);
     setProjects([]);
     setMessages([]);
+    setGalleryList([]);
   };
 
   const handleSaveAbout = (e) => {
@@ -370,6 +388,12 @@ function AdminPanel() {
                 >
                   ℹ️ About Me Manager
                 </div>
+                <div 
+                  className={`console-tree-item ${activeSection === 'gallery' ? 'selected' : ''}`}
+                  onClick={() => setActiveSection('gallery')}
+                >
+                  🖼️ NFT Gallery Manager
+                </div>
               </div>
             </div>
           </div>
@@ -385,7 +409,9 @@ function AdminPanel() {
                 ? 'Projects' 
                 : activeSection === 'messages' 
                 ? 'User Messages' 
-                : 'About Me Editor'}
+                : activeSection === 'about' 
+                ? 'About Me Editor' 
+                : 'NFT Gallery Manager'}
             </h2>
             {activeSection !== 'messages' && activeSection !== 'about' && (
               <button 
@@ -394,10 +420,12 @@ function AdminPanel() {
                   mode: 'add',
                   data: activeSection === 'blog' 
                     ? { title: '', Title: '', date: new Date().toISOString().split('T')[0], Date: new Date().toISOString().split('T')[0], excerpt: '', Excerpt: '', content: '', Content: '' }
-                    : { name: '', Name: '', icon: '📂', Icon: '📂', desc: '', Desc: '', tech: '', Tech: '', url: '', URL: '', Url: '' }
+                    : activeSection === 'projects'
+                    ? { name: '', Name: '', icon: '📂', Icon: '📂', desc: '', Desc: '', tech: '', Tech: '', url: '', URL: '', Url: '' }
+                    : { title: '', Title: '', description: '', Description: '', image: '', Image: '' }
                 })}
               >
-                ➕ New {activeSection === 'blog' ? 'Post' : 'Project'}
+                ➕ New {activeSection === 'blog' ? 'Post' : activeSection === 'projects' ? 'Project' : 'NFT Photo'}
               </button>
             )}
           </div>
@@ -561,6 +589,48 @@ function AdminPanel() {
                 </div>
               </div>
             )}
+
+            {/* GALLERY TABLE */}
+            {activeSection === 'gallery' && (
+              <table className="console-table">
+                <thead>
+                  <tr>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {galleryList.length === 0 ? (
+                    <tr><td colSpan="4" className="table-empty">No gallery photos found.</td></tr>
+                  ) : (
+                    galleryList.map(item => {
+                      const id = item.id || item.ID;
+                      return (
+                        <tr key={id}>
+                          <td style={{ textAlign: 'center', verticalAlign: 'middle', width: '80px' }}>
+                            <img 
+                              src={item.image || item.Image || item.image_url || item.ImageUrl} 
+                              alt={item.title || item.Title} 
+                              style={{ width: '48px', height: '48px', objectFit: 'cover', border: '1px solid #7f9db9' }} 
+                            />
+                          </td>
+                          <td><strong>{item.title || item.Title}</strong></td>
+                          <td>{item.description || item.Description}</td>
+                          <td>
+                            <div className="table-actions">
+                              <button onClick={() => setEditorModal({ type: 'gallery', mode: 'edit', data: item })}>Edit</button>
+                              <button onClick={() => handleDelete('gallery', id)} className="delete-btn">Delete</button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
@@ -653,7 +723,7 @@ function AdminPanel() {
                       />
                     </div>
                   </>
-                ) : (
+                ) : editorModal.type === 'projects' ? (
                   <>
                     <div className="console-form-row">
                       <label>Name:</label>
@@ -716,6 +786,62 @@ function AdminPanel() {
                         })}
                         required
                         placeholder="https://github.com/..."
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="console-form-row">
+                      <label>Title:</label>
+                      <input 
+                        type="text" 
+                        value={editorModal.data.title || editorModal.data.Title || ''} 
+                        onChange={(e) => setEditorModal({
+                          ...editorModal,
+                          data: { ...editorModal.data, title: e.target.value, Title: e.target.value }
+                        })}
+                        required
+                      />
+                    </div>
+                    <div className="console-form-row">
+                      <label>Image URL:</label>
+                      <input 
+                        type="text" 
+                        value={editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl || ''} 
+                        onChange={(e) => setEditorModal({
+                          ...editorModal,
+                          data: { 
+                            ...editorModal.data, 
+                            image: e.target.value, 
+                            Image: e.target.value,
+                            image_url: e.target.value,
+                            ImageUrl: e.target.value
+                          }
+                        })}
+                        required
+                        placeholder="https://images.unsplash.com/..."
+                      />
+                    </div>
+                    {(editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl) && (
+                      <div className="console-form-row" style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                        <img 
+                          src={editorModal.data.image || editorModal.data.Image || editorModal.data.image_url || editorModal.data.ImageUrl} 
+                          alt="Preview" 
+                          style={{ maxWidth: '120px', maxHeight: '120px', objectFit: 'contain', border: '1px solid #7f9db9' }} 
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      </div>
+                    )}
+                    <div className="console-form-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                      <label style={{ marginBottom: '4px' }}>Description:</label>
+                      <textarea 
+                        value={editorModal.data.description || editorModal.data.Description || ''} 
+                        onChange={(e) => setEditorModal({
+                          ...editorModal,
+                          data: { ...editorModal.data, description: e.target.value, Description: e.target.value }
+                        })}
+                        required
+                        style={{ minHeight: '80px', fontFamily: 'inherit' }}
                       />
                     </div>
                   </>

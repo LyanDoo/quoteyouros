@@ -1778,3 +1778,72 @@
   }
 }
 
+/* ==============================
+   PHOTO VIEWER (NFT GALLERY) STYLES
+   ============================== */
+.pv-btn {
+  background: linear-gradient(180deg, #6ba1ea 0%, #3a75c4 40%, #1e529a 85%, #6ba1ea 100%) !important;
+  color: #fff !important;
+  border: 1px solid #1c3f7c !important;
+  box-shadow: inset 1px 1px 2px rgba(255,255,255,0.4), 1px 1px 2px rgba(0,0,0,0.2) !important;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  font-size: 11px !important;
+  border-radius: 50% !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, filter 0.15s ease;
+  font-weight: bold;
+}
+
+.pv-btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+.pv-btn:active {
+  background: linear-gradient(180deg, #1e529a 0%, #3a75c4 60%, #6ba1ea 100%) !important;
+  box-shadow: inset -1px -1px 2px rgba(255,255,255,0.4), inset 1px 1px 3px rgba(0,0,0,0.6) !important;
+  transform: scale(0.95);
+}
+
+.pv-btn.active {
+  background: linear-gradient(180deg, #e25822 0%, #b22222 100%) !important;
+  border-color: #800000 !important;
+}
+
+.pv-nav-arrow:hover {
+  background: rgba(236, 233, 216, 0.95) !important;
+  border-color: #316ac5 !important;
+  transform: scale(1.1) !important;
+  color: #003399;
+}
+
+/* Responsive adjustment for Mobile Photo Viewer */
+@media (max-width: 768px) {
+  .pv-toolbar {
+    flex-wrap: wrap;
+    gap: 6px !important;
+    padding: 6px !important;
+  }
+  
+  .pv-btn {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    font-size: 10px !important;
+  }
+
+  .pv-nav-arrow {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+  }
+}
+
+
