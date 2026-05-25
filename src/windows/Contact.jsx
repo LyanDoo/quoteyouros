@@ -15,6 +15,14 @@ function Contact() {
       return;
     }
 
+    // Client-side email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.from)) {
+      setMsgContent('Please enter a valid email address.');
+      setShowMsg(true);
+      return;
+    }
+
     setIsSending(true);
 
     fetch(`${API_URL}/api/contact`, {
@@ -25,19 +33,24 @@ function Contact() {
       body: JSON.stringify(formData),
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Network response was not ok');
+        if (!res.ok) {
+          return res.json().then((errData) => {
+            throw new Error(errData.message || errData.error || 'Server responded with an error');
+          }).catch(() => {
+            throw new Error('Network response was not ok');
+          });
+        }
         return res.json();
       })
       .then(() => {
-        setMsgContent('Message sent successfully! ✉️\\n\\nThank you for reaching out, I\'ll get back to you soon.');
+        setMsgContent('Message sent successfully! ✉️\n\nThank you for reaching out, I\'ll get back to you soon.');
         setShowMsg(true);
         setFormData({ from: '', subject: '', message: '' });
       })
       .catch((error) => {
-        console.warn('Backend not reachable, mocking successful send.', error);
-        setMsgContent('Message sent successfully! ✉️\\n\\n(Fallback mode: backend is currently unreachable, but message was simulated).');
+        console.error('Failed to send message:', error);
+        setMsgContent(`Error: Failed to send message.\n\n${error.message || 'The server could not be reached. Please try again later.'}`);
         setShowMsg(true);
-        setFormData({ from: '', subject: '', message: '' });
       })
       .finally(() => {
         setIsSending(false);
