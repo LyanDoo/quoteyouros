@@ -61,16 +61,16 @@ function Contact() {
         </div>
         <div className="outlook-body" style={{ flex: 1, overflowY: 'auto', cursor: isSending ? 'wait' : 'default' }}>
           <h2 style={{ fontSize: '14px', marginBottom: '12px', color: '#003366' }}>📧 New Message</h2>
-          
+
           <div className="outlook-form-row">
             <label>To:</label>
-            <input type="text" value="lio@lyandoo.online" readOnly style={{ background: '#f0f0f0' }} />
+            <input type="text" value="rolyandos@gmail.com" readOnly style={{ background: '#f0f0f0' }} />
           </div>
           <div className="outlook-form-row">
             <label>From:</label>
-            <input 
-              type="text" 
-              placeholder="your@email.com" 
+            <input
+              type="text"
+              placeholder="your@email.com"
               value={formData.from}
               onChange={(e) => setFormData({ ...formData, from: e.target.value })}
               disabled={isSending}
@@ -78,9 +78,9 @@ function Contact() {
           </div>
           <div className="outlook-form-row">
             <label>Subject:</label>
-            <input 
-              type="text" 
-              placeholder="Hello from your site!" 
+            <input
+              type="text"
+              placeholder="Hello from your site!"
               value={formData.subject}
               onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
               disabled={isSending}
@@ -88,14 +88,14 @@ function Contact() {
           </div>
           <div className="outlook-form-row" style={{ alignItems: 'flex-start' }}>
             <label style={{ marginTop: '4px' }}>Message:</label>
-            <textarea 
+            <textarea
               placeholder="Write your message here..."
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               disabled={isSending}
             ></textarea>
           </div>
-          
+
           <div className="outlook-actions">
             <button onClick={handleSend} disabled={isSending}>
               {isSending ? '⏳ Sending...' : '📤 Send'}
@@ -115,7 +115,7 @@ function Contact() {
               <a href="https://twitter.com" target="_blank" rel="noreferrer" className="outlook-social-link">
                 🐦 Twitter
               </a>
-              <a href="mailto:lio@lyandoo.online" className="outlook-social-link">
+              <a href="mailto:rolyandos@gmail.com" className="outlook-social-link">
                 ✉️ Email
               </a>
             </div>
@@ -124,7 +124,7 @@ function Contact() {
       </div>
 
       {showMsg && (
-        <div 
+        <div
           style={{
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 99999
