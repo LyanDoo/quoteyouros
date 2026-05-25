@@ -165,3 +165,31 @@
   text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
   white-space: nowrap;
 }
+
+/* === Mobile Taskbar === */
+@media (max-width: 768px) {
+  .taskbar-btn {
+    min-width: 40px;
+    max-width: 100px;
+    padding: 0 6px;
+    font-size: 10px;
+  }
+
+  .taskbar-btn .taskbar-btn-label {
+    display: none;
+  }
+
+  #start-button {
+    padding: 0 8px 0 4px;
+    font-size: 11px;
+  }
+
+  #system-tray {
+    padding: 0 6px;
+  }
+
+  #clock {
+    font-size: 10px;
+  }
+}
+

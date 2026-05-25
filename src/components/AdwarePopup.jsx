@@ -2,8 +2,20 @@ import React, { useState } from 'react';
 
 function AdwarePopup({ id, onClose, onFocus, zIndex, imageSrc }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [pos, setPos] = useState({ x: Math.random() * 200 + 100, y: Math.random() * 200 + 100 });
-  const [size, setSize] = useState({ width: 400, height: 350 });
+  const [pos, setPos] = useState(() => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const w = Math.min(400, vw - 20);
+    const h = Math.min(350, vh - 60);
+    return {
+      x: Math.min(Math.random() * 200 + 100, vw - w - 10),
+      y: Math.min(Math.random() * 200 + 100, vh - h - 50),
+    };
+  });
+  const [size, setSize] = useState(() => ({
+    width: Math.min(400, window.innerWidth - 20),
+    height: Math.min(350, window.innerHeight - 60),
+  }));
   const [isResizing, setIsResizing] = useState(false);
 
   const handleMouseDown = (e) => {

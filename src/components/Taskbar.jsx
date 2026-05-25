@@ -46,7 +46,7 @@ function Taskbar({ windows, focusedWindowId, onWindowClick, toggleStartMenu, sta
               <span className="taskbar-btn-icon">
                 {typeof win.icon === 'string' && win.icon.length <= 2 ? win.icon : '📄'}
               </span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span className="taskbar-btn-label" style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {win.title}
               </span>
             </button>

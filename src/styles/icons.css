@@ -54,3 +54,22 @@
   text-shadow: none;
   padding: 0 2px;
 }
+
+/* === Mobile Desktop Icons === */
+@media (max-width: 768px) {
+  .desktop-icon {
+    width: 72px;
+    padding: 6px 4px;
+  }
+
+  .desktop-icon-img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .desktop-icon-label {
+    font-size: 10px;
+    max-width: 68px;
+  }
+}
+

@@ -12,6 +12,7 @@ const ICON_DATA = [
 function DraggableIcon({ data, openApp, isSelected, onSelect }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const lastTapRef = React.useRef(0);
 
   const handleMouseDown = (e) => {
     if (e.button !== 0) return; // Only left mouse button
@@ -51,6 +52,23 @@ function DraggableIcon({ data, openApp, isSelected, onSelect }) {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  // Handle touch-based double-tap for mobile (since onDoubleClick doesn't work reliably on touch)
+  const handleTouchEnd = (e) => {
+    e.stopPropagation();
+    onSelect(data.id);
+
+    const now = Date.now();
+    if (now - lastTapRef.current < 300) {
+      // Double-tap detected — open the app
+      if (data.appModule) {
+        openApp(data.appModule, data.icon);
+      }
+      lastTapRef.current = 0;
+    } else {
+      lastTapRef.current = now;
+    }
+  };
+
   return (
     <div
       className={`desktop-icon ${isSelected ? 'selected' : ''}`}
@@ -61,6 +79,7 @@ function DraggableIcon({ data, openApp, isSelected, onSelect }) {
           openApp(data.appModule, data.icon);
         }
       }}
+      onTouchEnd={handleTouchEnd}
       style={{
         transform: `translate(${pos.x}px, ${pos.y}px)`,
         zIndex: isDragging ? 10 : 1,
