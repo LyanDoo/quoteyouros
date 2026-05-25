@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: lyandoo/quoteyouros-frontend:v1.0.0
+    image: lyandoo/quoteyouros-frontend:v1.0.1
     build:
       context: .
       args:
