@@ -35,6 +35,12 @@
   flex-shrink: 0;
 }
 
+/* Elevate title bar controls above Rnd resize handles to prevent overlapping resize borders from blocking touch/click events */
+.xp-window .title-bar-controls {
+  position: relative !important;
+  z-index: 100 !important;
+}
+
 .xp-window.inactive .title-bar {
   background: linear-gradient(180deg, #9db9eb 0%, #768dbd 10%, #8cb4dd 90%, #9db9eb 100%);
 }

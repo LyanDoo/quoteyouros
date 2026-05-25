@@ -23,7 +23,7 @@ function TitleBar({ title, icon, isMaximized, isMobile, onMinimize, onMaximize, 
         </span>
         <span>{title}</span>
       </div>
-      <div className="title-bar-controls">
+      <div className="title-bar-controls" onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()}>
         <button aria-label="Minimize" onClick={onMinimize}></button>
         {!isMobile && (
           <button aria-label={isMaximized ? 'Restore' : 'Maximize'} onClick={onMaximize}></button>
@@ -39,14 +39,21 @@ function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClos
 
   const { title, icon, width, height, x, y, isMaximized, zIndex, contentComponent: ContentComponent } = windowData;
 
+  const handleFocus = (e) => {
+    if (e.target.closest('.title-bar-controls')) {
+      return;
+    }
+    onFocus();
+  };
+
   // --- Mobile: always render as a full-screen-like panel (no drag/resize) ---
   if (isMobile) {
     return (
       <div
         className={`window xp-window mobile-window ${windowData.isMinimized ? 'minimized' : ''} ${isFocused ? '' : 'inactive'}`}
         style={{ zIndex }}
-        onMouseDownCapture={onFocus}
-        onTouchStartCapture={onFocus}
+        onMouseDownCapture={handleFocus}
+        onTouchStartCapture={handleFocus}
       >
         <TitleBar
           title={title}
@@ -72,7 +79,7 @@ function Window({ windowData, isFocused, onFocus, onMinimize, onMaximize, onClos
       minHeight={150}
       bounds="parent"
       dragHandleClassName="title-bar"
-      onMouseDownCapture={onFocus}
+      onMouseDownCapture={handleFocus}
       disableDragging={isMaximized}
       enableResizing={!isMaximized}
       style={{ zIndex, display: 'flex', flexDirection: 'column' }}
