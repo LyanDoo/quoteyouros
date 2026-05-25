@@ -19,7 +19,7 @@ export const VALID_ROUTES = {
 export function getAppContent(moduleName) {
   switch (moduleName) {
     case 'about-me':
-      return { title: 'About Me.txt - Notepad', width: 520, height: 460, component: AboutMe };
+      return { title: 'LyanDoo.txt - Notepad', width: 520, height: 460, component: AboutMe };
     case 'projects':
       return { title: 'My Projects - Windows Explorer', width: 650, height: 450, component: Projects };
     case 'blog':

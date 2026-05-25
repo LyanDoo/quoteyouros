@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const ICON_DATA = [
-  { id: 'about', label: 'About Me.txt', icon: '📝', appModule: 'about-me' },
+  { id: 'about', label: 'LyanDoo.txt', icon: '📝', appModule: 'about-me' },
   { id: 'projects', label: 'My Projects', icon: '📁', appModule: 'projects' },
   { id: 'blog', label: 'Blog', icon: '🌐', appModule: 'blog' },
   { id: 'resume', label: 'Resume.doc', icon: '📄', appModule: 'resume' },
@@ -37,7 +37,7 @@ function DraggableIcon({ data, openApp, isSelected, onSelect }) {
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-      
+
       if (dragged) {
         // Snap to an invisible 74x74 grid relative to original position
         setPos((current) => ({
@@ -87,16 +87,16 @@ function DraggableIcon({ data, openApp, isSelected, onSelect }) {
         pointerEvents: 'auto', // override parent pointer-events: none
       }}
     >
-      <div 
-        className="desktop-icon-img" 
-        style={{ 
-          fontSize: '40px', 
-          lineHeight: '48px', 
-          width: '48px', 
-          height: '48px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
+      <div
+        className="desktop-icon-img"
+        style={{
+          fontSize: '40px',
+          lineHeight: '48px',
+          width: '48px',
+          height: '48px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
         {data.icon}
