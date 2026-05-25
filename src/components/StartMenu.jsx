@@ -58,7 +58,7 @@ function StartMenu({ isOpen, closeMenu, openApp }) {
             </div>
           </div>
           <div className="start-menu-footer">
-            <button 
+            <button
               className="start-menu-footer-btn"
               onClick={() => {
                 closeMenu();
@@ -72,7 +72,7 @@ function StartMenu({ isOpen, closeMenu, openApp }) {
       )}
 
       {showShutdown && (
-        <div 
+        <div
           style={{
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100000
@@ -85,15 +85,12 @@ function StartMenu({ isOpen, closeMenu, openApp }) {
             </div>
             <div className="window-body" style={{ padding: '16px', textAlign: 'center' }}>
               <p style={{ marginBottom: '16px', fontSize: '12px' }}>
-                Are you sure you want to turn off the computer? 😄
-              </p>
-              <p style={{ marginBottom: '16px', fontSize: '11px', color: '#666' }}>
-                (Don't worry, this is just a website!)
+                Are you sure you want to turn off the computer?
               </p>
               <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                 <button onClick={() => setShowShutdown(false)}>Cancel</button>
                 <button onClick={() => {
-                  document.body.innerHTML = '<div style="background:#000;color:#fff;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:Tahoma;"><p>Windows is shutting down...</p><p style="font-size:12px;margin-top:12px;color:#888;">Just kidding! Refresh to restart 🔄</p></div>';
+                  document.body.innerHTML = '<div style="background:#000;color:#fff;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:Tahoma;"><p>Windows is shutting down...</p></div>';
                 }}>Turn Off</button>
               </div>
             </div>
